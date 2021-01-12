@@ -1,0 +1,27 @@
+package org.firstinspires.ftc.teamcode.UltimateGoal.Systems;
+
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+
+public class DrivingSystem {
+	LinearOpMode opMode;
+	DcMotor leftMotor;
+	DcMotor rightMotor;
+
+	public DrivingSystem(LinearOpMode opMode){
+		this.opMode = opMode;
+		leftMotor = opMode.hardwareMap.get(DcMotor.class,"left_drive");
+		rightMotor = opMode.hardwareMap.get(DcMotor.class,"right_drive");
+	}
+
+	public void driveByJoystick(double horizontal, double vertical){
+		double left = vertical-horizontal;
+		double right = vertical+horizontal;
+		if(Math.abs(left)>1 || Math.abs(right)>1){
+			left = left * Math.max(Math.abs(left),Math.abs(right));
+			right = right * Math.max(Math.abs(left),Math.abs(right));
+		}
+		leftMotor.setPower(left);
+		rightMotor.setPower(right);
+	}
+}
