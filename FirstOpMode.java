@@ -36,7 +36,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.Systems.DrivingSystem;
+import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.DrivingSystem;
 
 
 /**
@@ -67,8 +67,6 @@ public class FirstOpMode extends LinearOpMode {
 		// run until the end of the match (driver presses STOP)
 		while (opModeIsActive()) {
 			drivingSystem.driveByJoystick(gamepad1.left_stick_x,-gamepad1.left_stick_y);
-
-
 		}
 	}
 
