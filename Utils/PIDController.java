@@ -3,10 +3,10 @@ package org.firstinspires.ftc.teamcode.UltimateGoal.Utils;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class PIDController {
-	private ElapsedTime runtime = new ElapsedTime();
+	private final ElapsedTime runtime = new ElapsedTime();
 	private double kp, ki, kd;
 	double lastError = Double.NaN;
-	double proportional, integral = 0, derivitive = 0;
+	double proportional, integral = 0, derivative = 0;
 	public PIDController(double p,double i,double d) {
 		kp = p;
 		ki = i;
@@ -18,11 +18,11 @@ public class PIDController {
 		proportional = kp*Error;
 		if(lastError != Double.NaN){
 			integral += ki*(Error-lastError)*(deltaTime);
-			derivitive = kd*((Error-lastError)/(deltaTime));
+			derivative = kd*((Error-lastError)/(deltaTime));
 		}
 		lastError=Error;
 		runtime.reset();
-		double value = proportional + integral + derivitive;
+		double value = proportional + integral + derivative;
 	    if(value < -1){
 	    	return -1;
 	    }
@@ -41,8 +41,8 @@ public class PIDController {
 		return integral/ki;
 	}
 
-	public double getDerivitive() {
-		return derivitive/kd;
+	public double getDerivative() {
+		return derivative/kd;
 	}
 
 	public double getKp() {
