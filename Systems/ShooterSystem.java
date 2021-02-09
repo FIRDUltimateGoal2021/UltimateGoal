@@ -28,7 +28,7 @@ public class ShooterSystem {
 
         // in radians
         final double servoAngle0 = 0;
-
+        // TODO: 09/02/2021 find out what the 1.024 is for
         final double newServoAngle = Math.asin(
                 Math.sin(servoAngle0) + 1.024 * Math.sin(Math.toRadians(newHorizontalAngle))
         );

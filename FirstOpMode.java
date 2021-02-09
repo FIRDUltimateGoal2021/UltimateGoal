@@ -84,11 +84,12 @@ public class FirstOpMode extends LinearOpMode {
             if (gamepad1.a) {
                 shooterSystem.shoot();
                 timer.reset();
+                // TODO: 09/02/2021 there is a problem here
                 if (timer.seconds() >= 1) {
                     shooterSystem.load();
                 }
             }
-
+            // TODO: 09/02/2021 find a better way to detect start of press
             if (gamepad1.b) {
                 if (b == 0) {
                     collectionSystem.toggle();
