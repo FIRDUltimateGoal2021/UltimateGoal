@@ -32,11 +32,11 @@ package org.firstinspires.ftc.teamcode.UltimateGoal;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.CollectionSystem;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.DrivingSystem;
+import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.ShooterSystem;
 
 
 /**
@@ -44,30 +44,68 @@ import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.DrivingSystem;
  * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
  * of the FTC Driver Station. When an selection is made from the menu, the corresponding OpMode
  * class is instantiated on the Robot Controller and executed.
- *
+ * <p>
  * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
  * It includes all the skeletal structure that all linear OpModes contain.
- *
+ * <p>
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="FirstOpMode", group="Linear Opmode")
+@TeleOp(name = "FirstOpMode", group = "Linear Opmode")
 //@Disabled
 public class FirstOpMode extends LinearOpMode {
 
-	DrivingSystem drivingSystem;
+    DrivingSystem drivingSystem;
+    ShooterSystem shooterSystem;
+    CollectionSystem collectionSystem;
+    ElapsedTime timer = new ElapsedTime();
 
-	@Override
-	public void runOpMode() {
-		drivingSystem = new DrivingSystem(this);
-		// Wait for the game to start (driver presses PLAY)
-		waitForStart();
+    @Override
+    public void runOpMode() {
+        drivingSystem = new DrivingSystem(this);
+        shooterSystem = new ShooterSystem(this);
+        collectionSystem = new CollectionSystem(this);
 
-		// run until the end of the match (driver presses STOP)
-		while (opModeIsActive()) {
-			drivingSystem.driveByJoystick(gamepad1.left_stick_x,-gamepad1.left_stick_y);
-		}
-	}
+        // Wait for the game to start (driver presses PLAY)
+        waitForStart();
+
+        int b = 0;
+
+        // run until the end of the match (driver presses STOP)
+        while (opModeIsActive()) {
+            shooterSystem.motor.setPower(1);
+            drivingSystem.driveByJoystick(gamepad2.left_stick_x, -gamepad2.left_stick_y);
+            shooterSystem.changeAngle(
+                    shooterSystem.currentHorizontalAngle
+                            - 0.1 * gamepad1.right_stick_y
+            );
+
+            if (gamepad1.a) {
+                shooterSystem.shoot();
+                timer.reset();
+                if (timer.seconds() >= 1) {
+                    shooterSystem.load();
+                }
+            }
+
+            if (gamepad1.b) {
+                if (b == 0) {
+                    collectionSystem.toggle();
+                }
+                b += 1;
+            } else if (b > 0) {
+                b = 0;
+            }
+
+            if (gamepad1.x) {
+                System.out.println("x");
+            }
+
+            if (gamepad1.y) {
+                System.out.println("y");
+            }
+        }
+    }
 
 }
