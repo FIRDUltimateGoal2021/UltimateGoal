@@ -70,7 +70,7 @@ public class FirstOpMode extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        int b = 0;
+        boolean b = false;
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
@@ -90,12 +90,12 @@ public class FirstOpMode extends LinearOpMode {
             }
 
             if (gamepad1.b) {
-                if (b == 0) {
+                if (!b) {
                     collectionSystem.toggle();
                 }
-                b += 1;
-            } else if (b > 0) {
-                b = 0;
+                b = true;
+            } else if (b) {
+                b = false;
             }
 
             if (gamepad1.x) {
