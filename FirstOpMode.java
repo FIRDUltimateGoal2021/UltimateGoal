@@ -37,6 +37,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.CollectionSystem;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.DrivingSystem;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.ShooterSystem;
+import org.firstinspires.ftc.teamcode.UltimateGoal.Utils.OurGamepad;
 
 
 /**
@@ -59,53 +60,61 @@ public class FirstOpMode extends LinearOpMode {
     DrivingSystem drivingSystem;
     ShooterSystem shooterSystem;
     CollectionSystem collectionSystem;
-    ElapsedTime timer = new ElapsedTime();
+    OurGamepad ourGamepad1;
+    ElapsedTime timer = new ElapsedTime(100);
 
     @Override
     public void runOpMode() {
         drivingSystem = new DrivingSystem(this);
         shooterSystem = new ShooterSystem(this);
         collectionSystem = new CollectionSystem(this);
+        ourGamepad1 = new OurGamepad(gamepad1);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        boolean b = false;
+        shooterSystem.load();
+        shooterSystem.on();
+        collectionSystem.on();
+
+        final double loadingTime = 1;
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            shooterSystem.motor.setPower(1);
+
+            // Joysticks
             drivingSystem.driveByJoystick(gamepad2.left_stick_x, -gamepad2.left_stick_y);
             shooterSystem.changeAngle(
                     shooterSystem.currentHorizontalAngle
                             - 0.1 * gamepad1.right_stick_y
             );
 
-            if (gamepad1.a) {
+            // Button a: shoot
+            if (ourGamepad1.buttonPress("a") && timer.seconds() >= 2 * loadingTime) {
                 shooterSystem.shoot();
                 timer.reset();
-                // TODO: 09/02/2021 there is a problem here
-                if (timer.seconds() >= 1) {
-                    shooterSystem.load();
-                }
             }
-            // TODO: 09/02/2021 find a better way to detect start of press
-            if (gamepad1.b) {
-                if (!b) {
-                    collectionSystem.toggle();
-                }
-                b = true;
-            } else if (b) {
-                b = false;
+            // Make sure the shooter is always loaded (unless when shooting)
+            if (timer.seconds() >= loadingTime) {
+                shooterSystem.load();
             }
 
-            if (gamepad1.x) {
-                System.out.println("x");
+            // Button b: toggle the collectionSystem
+            if (ourGamepad1.buttonPress("b")) {
+                collectionSystem.toggle();
             }
 
-            if (gamepad1.y) {
-                System.out.println("y");
-            }
+//            // Button x:
+//            if (ourGamepad1.buttonPress("x")) {
+//                //
+//            }
+//
+//            // Button y:
+//            if (ourGamepad1.buttonPress("y")) {
+//                //
+//            }
+
+            ourGamepad1.update();
         }
     }
 

@@ -17,7 +17,6 @@ public class ShooterSystem {
         motor = opMode.hardwareMap.get(DcMotor.class, "ShootingMotor");
         angleServo = opMode.hardwareMap.get(Servo.class, "AngleServo");
         ammo = opMode.hardwareMap.get(Servo.class, "Ammunition");
-        load();
     }
 
     /**
@@ -28,9 +27,10 @@ public class ShooterSystem {
 
         // in radians
         final double servoAngle0 = 0;
-        // TODO: 09/02/2021 find out what the 1.024 is for
+        final double armToShooterRatio = 1.024;
+
         final double newServoAngle = Math.asin(
-                Math.sin(servoAngle0) + 1.024 * Math.sin(Math.toRadians(newHorizontalAngle))
+                Math.sin(servoAngle0) + armToShooterRatio * Math.sin(Math.toRadians(newHorizontalAngle))
         );
         angleServo.setPosition(newServoAngle / Math.PI);
     }
@@ -40,6 +40,15 @@ public class ShooterSystem {
     }
 
     public void shoot() {
-        ammo.setPosition(0);
+        final double initialPosition = 0;
+        ammo.setPosition(initialPosition);
+    }
+
+    public void off() {
+        motor.setPower(0);
+    }
+
+    public void on() {
+        motor.setPower(1);
     }
 }
