@@ -24,4 +24,21 @@ public class DrivingSystem {
 		leftMotor.setPower(left);
 		rightMotor.setPower(right);
 	}
+
+	public void driveAutonomously(double[][] way) {
+		 for (double[] segment : way) {
+		 	rotate(segment[0]);
+		 	driveForward(segment[1]);
+		 }
+	}
+
+	public void driveForward(double distance) {
+	}
+
+	/**
+	 *
+	 * @param angle in degrees
+	 */
+	public void rotate(double angle) {
+	}
 }
