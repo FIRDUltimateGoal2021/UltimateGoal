@@ -3,7 +3,10 @@ package org.firstinspires.ftc.teamcode.UltimateGoal.Systems;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import java.util.function.Function;
+
 public class DrivingSystem {
+
 	LinearOpMode opMode;
 	DcMotor leftMotor;
 	DcMotor rightMotor;
@@ -30,6 +33,12 @@ public class DrivingSystem {
 		 	rotate(segment[0]);
 		 	driveForward(segment[1]);
 		 }
+	}
+	public void driveAutonomouslybeter(int a, int b, Function<double,>) {
+		for (double[] segment : way) {
+			rotate(segment[0]);
+			driveForward(segment[1]);
+		}
 	}
 
 	public void driveForward(double distance) {
