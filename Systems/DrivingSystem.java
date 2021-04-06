@@ -1,82 +1,102 @@
 package org.firstinspires.ftc.teamcode.UltimateGoal.Systems;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.function.Function;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 
-import java.util.function.Function;
 
 public class DrivingSystem {
 
-	LinearOpMode opMode;
-	DcMotor leftMotor;
-	DcMotor rightMotor;
+    LinearOpMode opMode;
+    DcMotor leftMotor;
+    DcMotor rightMotor;
 
-	public DrivingSystem(LinearOpMode opMode){
-		this.opMode = opMode;
-		leftMotor = opMode.hardwareMap.get(DcMotor.class,"left_drive");
-		rightMotor = opMode.hardwareMap.get(DcMotor.class,"right_drive");
-	}
+    public DrivingSystem(LinearOpMode opMode) {
+        this.opMode = opMode;
+        leftMotor = opMode.hardwareMap.get(DcMotor.class, "left_drive");
+        rightMotor = opMode.hardwareMap.get(DcMotor.class, "right_drive");
+    }
 
-	public void driveByJoystick(double horizontal, double vertical){
-		double left = vertical-horizontal;
-		double right = vertical+horizontal;
-		if(Math.abs(left)>1 || Math.abs(right)>1){
-			left = left * Math.max(Math.abs(left),Math.abs(right));
-			right = right * Math.max(Math.abs(left),Math.abs(right));
-		}
-		leftMotor.setPower(left);
-		rightMotor.setPower(right);
-	}
+    public void driveByJoystick(double horizontal, double vertical) {
+        double left = vertical - horizontal;
+        double right = vertical + horizontal;
+        if (Math.abs(left) > 1 || Math.abs(right) > 1) {
+            left = left * Math.max(Math.abs(left), Math.abs(right));
+            right = right * Math.max(Math.abs(left), Math.abs(right));
+        }
+        leftMotor.setPower(left);
+        rightMotor.setPower(right);
+    }
 
-	public void driveAutonomously(double[][] way) {
-		 for (double[] segment : way) {
-			 rotate(segment[0]);
-		 	driveForward(segment[1]);
-		 }
-	}
-	public void driveAutonomouslybeter(double a, double b, Function<Double, Position> c) {
-		ElapsedTime timer = new ElapsedTime();
+    public void driveAutonomously(Position[] way) {
+        Function<Double, Position> func = new Function<Double, Position>() {
+            @Override
+            public Position apply(Double aDouble) {
+                return new Position(DistanceUnit.METER,0,0,0,0);
+            }
+        };
+        for (Position pos : way) {
+            //
+        }
+    }
 
-		double j=1/60;
-		for(double move=a;move<b&&opMode.opModeIsActive();move=+j) {
-			timer.reset();
-			Position electron;
-			Position protn;
-			Position neutron;
-			electron = c.apply(move - j);
-			neutron = c.apply(move);
-			protn = c.apply(move + j);
-			double xdeku = (protn.x - neutron.x) / j;
-			double ydeku = (protn.y - neutron.y) / j;
-			double xbakugo = (neutron.x - electron.x) / j;
-			double ybakugo = (neutron.y - electron.y) / j;
-			double yida = (ydeku - ybakugo) / j;
-			double xida = (xdeku - xbakugo) / j;
-			double teta = Math.atan2(xdeku,ydeku);
-			double Oyashirox=yida*Math.cos(teta)+xida*Math.sin(teta);
-			double Oyashirohy=yida*Math.sin(teta)-xida*Math.cos(teta);
-			driveByJoystick(Oyashirohy,Oyashirox);
-            if(timer.seconds()<j){
-            	opMode.sleep((long)((j - timer.seconds()) / 1000));
-			}
+    public void driveAutonomouslyBetter(
+            double t0, double tn, Function<Double, Position> func
+    ) {
+        ElapsedTime timer = new ElapsedTime();
 
-		}
-		stopstupid();
-	}
-	public void stopstupid() {
-		leftMotor.setPower(0);
-		rightMotor.setPower(0);
-	}
-	public void driveForward(double distance) {
-	}
+        double dt = 1 / 60f;
+        for (double t = t0; t < tn && opMode.opModeIsActive(); t += dt) {
+            timer.reset();
 
-	/**
-	 *
-	 * @param angle in degrees
-	 */
-	public void rotate(double angle) {
-	}
+            Position before;
+            Position current;
+            Position after;
+
+            before = func.apply(t - dt);
+            current = func.apply(t);
+            after = func.apply(t + dt);
+
+            double vxAfter = (after.x - current.x) / dt;
+            double vyAfter = (after.y - current.y) / dt;
+
+            double vxBefore = (current.x - before.x) / dt;
+            double vyBefore = (current.y - before.y) / dt;
+
+            double ax = (vxAfter - vxBefore) / dt;
+            double ay = (vyAfter - vyBefore) / dt;
+
+            double theta = Math.atan2(vxAfter, vyAfter);
+            double aRadial = ay * Math.cos(theta) + ax * Math.sin(theta);
+            double aTangent = ay * Math.sin(theta) - ax * Math.cos(theta);
+
+            driveByJoystick(aTangent, aRadial);
+            if (timer.seconds() < dt) {
+                opMode.sleep((long) ((dt - timer.seconds()) * 1000));
+            }
+        }
+        stöp();
+    }
+
+    public void stöp() {
+        leftMotor.setPower(0);
+        rightMotor.setPower(0);
+    }
+
+    public void driveForward(double distance) {
+    }
+
+    /**
+     * @param angle in degrees
+     */
+    public void rotate(double angle) {
+    }
 }

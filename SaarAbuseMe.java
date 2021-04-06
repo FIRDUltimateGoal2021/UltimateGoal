@@ -28,19 +28,16 @@
  */
 
 package org.firstinspires.ftc.teamcode.UltimateGoal;
-import android.graphics.Color;
+
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
-import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.SaarDoMeBully;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.ShooterSystem;
-import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.saar_do_me_bully;
 
 import java.util.function.Function;
 
@@ -50,18 +47,18 @@ import java.util.function.Function;
  * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
  * of the FTC Driver Station. When an selection is made from the menu, the corresponding OpMode
  * class is instantiated on the Robot Controller and executed.
- *
+ * <p>
  * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
  * It includes all the skeletal structure that all linear OpModes contain.
- *
+ * <p>
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Basic: Linear OpMode", group="Linear Opmode")
+@TeleOp(name = "Nevo's Absolutely Wonderful and Amazing I Want to Fucking Cum Code", group = "Linear Opmode")
 @Disabled
-public class sahar_abuse_my extends LinearOpMode {
-    public enum norman{
+public class SaarAbuseMe extends LinearOpMode {
+    public enum StartingPos {
         REDL,
         REDR,
         BLUER,
@@ -70,15 +67,17 @@ public class sahar_abuse_my extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        ShooterSystem rasengan = new ShooterSystem(this);
+        ShooterSystem shooterSystem = new ShooterSystem(this);
 
         NormalizedColorSensor pnimist;
-        Boolean ema =true;
-        Boolean ray=true;
-        norman jojo;
+        StartingPos jojo;
+        boolean color = true; // true == blue
+        boolean side = true; // true == left
+
         pnimist = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
-        saar_do_me_bully more = new saar_do_me_bully(pnimist);
+        SaarDoMeBully more = new SaarDoMeBully(pnimist);
         ElapsedTime timer = new ElapsedTime();
+
         Function<Double, Position> c = new Function<Double, Position>() {
             @Override
             public Position apply(Double aDouble) {
@@ -88,42 +87,39 @@ public class sahar_abuse_my extends LinearOpMode {
         } ;
         while (!isStarted()) {
             if (gamepad1.x) {
-                ema = true;
+                color = true;
             }
             if (gamepad1.b) {
-                ema = false;
+                color = false;
             }
 
-        if (gamepad1.dpad_left) {
-            ray = true;
-        }
-        if (gamepad1.dpad_right) {
-            ray = false;
-        }
-    }
-        if(ema){
-            if(ray){
-                jojo=norman.BLUEL;
+            if (gamepad1.dpad_left) {
+                side = true;
             }
-            else {
-                jojo=norman.BLUER;
+            if (gamepad1.dpad_right) {
+                side = false;
             }
         }
-        else {
-            if(ray){
-                jojo=norman.REDL;
+
+        if (color) {
+            if (side) {
+                jojo = StartingPos.BLUEL;
+            } else {
+                jojo = StartingPos.BLUER;
             }
-            else {
-                jojo=norman.REDR;
+        } else {
+            if (side) {
+                jojo = StartingPos.REDL;
+            } else {
+                jojo = StartingPos.REDR;
             }
         }
 
         waitForStart();
         timer.reset();
 
+        //driveAutonomouslybeter(0 , 5,c) ;
 
-        driveAutonomouslybeter(0 , 5,c) ;
-
-
+        // move to power shot
     }
 }
