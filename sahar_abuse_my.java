@@ -38,8 +38,11 @@ import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.ShooterSystem;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.saar_do_me_bully;
+
+import java.util.function.Function;
 
 
 /**
@@ -76,6 +79,13 @@ public class sahar_abuse_my extends LinearOpMode {
         pnimist = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
         saar_do_me_bully more = new saar_do_me_bully(pnimist);
         ElapsedTime timer = new ElapsedTime();
+        Function<Double, Position> c = new Function<Double, Position>() {
+            @Override
+            public Position apply(Double aDouble) {
+                Position f =  new Position();
+                return f;
+            }
+        } ;
         while (!isStarted()) {
             if (gamepad1.x) {
                 ema = true;
@@ -110,7 +120,10 @@ public class sahar_abuse_my extends LinearOpMode {
 
         waitForStart();
         timer.reset();
-//move to power shot
+
+
+        driveAutonomouslybeter(0 , 5,c) ;
+
 
     }
 }

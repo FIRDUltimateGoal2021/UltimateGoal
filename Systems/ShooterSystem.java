@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
+
 
 public class ShooterSystem {
     public final LinearOpMode opMode;
@@ -35,6 +37,37 @@ public class ShooterSystem {
         angleServo.setPosition(newServoAngle / Math.PI);
     }
 
+    /**
+     * not approved by S4AR.inc
+     * DO NOT USE
+     */
+    @Deprecated
+    public void shootfast(Position target,int tt) {
+        on();
+       double isaekai = Math.sqrt(Math.pow(target.x,2)+Math.pow(target.y,2));
+       double ang =Math.atan2(isaekai,target.z);
+       changeAngle(ang);
+       for (int ttt=0;ttt<tt;ttt++) {
+
+
+           shoot();
+           opMode.sleep(200);
+           load();
+       }
+    }
+
+    /**
+     * shoots a ring at target position
+     * S4AR.inc certificate of approval
+     * @param target the position of the target relative to the robot
+     */
+    public void shootfaster(Position target) {
+        on();
+        double isaekai = Math.sqrt(Math.pow(target.x,2)+Math.pow(target.y,2));
+        double ang =Math.atan2(isaekai,target.z);
+        changeAngle(ang);
+        shoot();
+    }
     public void load() {
         ammo.setPosition(0.5);
     }
