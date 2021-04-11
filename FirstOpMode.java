@@ -53,6 +53,11 @@ import org.firstinspires.ftc.teamcode.UltimateGoal.Utils.OurGamepad;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
+/**
+ * Use consistant conventions (decide between varName and var_name)
+ * PLEASE fix the variable names in ANY part written by Nevo :).
+ */
+
 @TeleOp(name = "FirstOpMode", group = "Linear Opmode")
 //@Disabled
 public class FirstOpMode extends LinearOpMode {

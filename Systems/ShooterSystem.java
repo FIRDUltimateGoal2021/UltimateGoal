@@ -7,7 +7,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 
-
+/**
+ * On and load are unclear. Try to find better names for Ammo and Motor.
+ */
 public class ShooterSystem {
     public final LinearOpMode opMode;
     public final Servo angleServo, ammo;
@@ -19,6 +21,7 @@ public class ShooterSystem {
         motor = opMode.hardwareMap.get(DcMotor.class, "ShootingMotor");
         angleServo = opMode.hardwareMap.get(Servo.class, "AngleServo");
         ammo = opMode.hardwareMap.get(Servo.class, "Ammunition");
+        changeAngle(0);
     }
 
     /**
@@ -48,8 +51,6 @@ public class ShooterSystem {
        double ang =Math.atan2(isaekai,target.z);
        changeAngle(ang);
        for (int ttt=0;ttt<tt;ttt++) {
-
-
            shoot();
            opMode.sleep(200);
            load();
