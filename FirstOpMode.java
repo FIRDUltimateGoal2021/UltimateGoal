@@ -88,7 +88,7 @@ public class FirstOpMode extends LinearOpMode {
         while (opModeIsActive()) {
 
             // Joysticks
-            drivingSystem.driveByJoystick(gamepad2.left_stick_x, -gamepad2.left_stick_y);
+            drivingSystem.driveByJoystick(-gamepad2.left_stick_y, -gamepad2.left_stick_x);
             shooterSystem.changeAngle(
                     shooterSystem.currentHorizontalAngle
                             - 0.1 * gamepad1.right_stick_y
