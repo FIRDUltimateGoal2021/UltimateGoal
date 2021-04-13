@@ -36,7 +36,7 @@ import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
-import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.SaarDoMeBully;
+import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.ColorSensor;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.ShooterSystem;
 
 import java.util.function.Function;
@@ -69,22 +69,23 @@ public class SaarAbuseMe extends LinearOpMode {
     public void runOpMode() {
         ShooterSystem shooterSystem = new ShooterSystem(this);
 
-        NormalizedColorSensor pnimist;
+        NormalizedColorSensor normalizedColorSensor;
         StartingPos jojo;
         boolean color = true; // true == blue
         boolean side = true; // true == left
 
-        pnimist = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
-        SaarDoMeBully more = new SaarDoMeBully(pnimist);
+        normalizedColorSensor = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
+        ColorSensor more = new ColorSensor(this);
         ElapsedTime timer = new ElapsedTime();
 
-        Function<Double, Position> c = new Function<Double, Position>() {
-            @Override
-            public Position apply(Double aDouble) {
-                Position f =  new Position();
-                return f;
-            }
-        } ;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            Function<Double, Position> c = new Function<Double, Position>() {
+                @Override
+                public Position apply(Double aDouble) {
+                    return new Position();
+                }
+            } ;
+        }
         while (!isStarted()) {
             if (gamepad1.x) {
                 color = true;
