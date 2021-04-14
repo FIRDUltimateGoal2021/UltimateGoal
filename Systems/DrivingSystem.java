@@ -1,28 +1,69 @@
 package org.firstinspires.ftc.teamcode.UltimateGoal.Systems;
 
-import android.os.Build;
 
+
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.function.Function;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 
 
 public class DrivingSystem {
-
+    Orientation angles;
+    BNO055IMU imu;
     LinearOpMode opMode;
     DcMotor leftMotor;
     DcMotor rightMotor;
-
+    double v;
+    double r;
     public DrivingSystem(LinearOpMode opMode) {
         this.opMode = opMode;
         leftMotor = opMode.hardwareMap.get(DcMotor.class, "left_drive");
         rightMotor = opMode.hardwareMap.get(DcMotor.class, "right_drive");
-    }
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
+        parameters.loggingEnabled      = true;
+        parameters.loggingTag          = "IMU";
 
+        imu = opMode.hardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
+    }
+public void moveteta (double teta){
+        double k;
+        if (teta <0)
+        {
+            k=-1;
+        }
+        else {
+            k= 1;
+        }
+    double dt = 1 / 60f;
+    ElapsedTime timer = new ElapsedTime();
+    angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        for (int g=0;angles.firstAngle<teta;g+= dt) {
+
+
+            timer.reset();
+
+            driveByJoystick(v*k,-v*k );
+            if (timer.seconds() < dt) {
+                opMode.sleep((long) ((dt - timer.seconds()) * 1000));
+            }
+        }
+            stöp();
+
+}
     public void driveByJoystick(double horizontal, double vertical) {
         double left = vertical - horizontal;
         double right = vertical + horizontal;
@@ -45,7 +86,25 @@ public class DrivingSystem {
             //
         }
     }
+public void easy (double teta1, double teta2, double dx, double dy){
+moveteta(teta1);
+    double rr =dx*dx+dy*dy;
+    ElapsedTime timer = new ElapsedTime();
 
+    double dt = 1 / 60f;
+    for (double t = 0; t <rr/v; t += dt) {
+        timer.reset();
+
+
+        driveByJoystick(1, 1);
+        if (timer.seconds() < dt) {
+            opMode.sleep((long) ((dt - timer.seconds()) * 1000));
+        }
+    }
+    stöp();
+
+    moveteta(teta2);
+}
     public void driveAutonomouslyBetter(
             double t0, double tn, Function<Double, Position> func
     ) {

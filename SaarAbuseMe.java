@@ -118,8 +118,8 @@ public class SaarAbuseMe extends LinearOpMode {
         waitForStart();
         timer.reset();
 
-        //driveAutonomouslybeter(0 , 5,c) ;
 
-        // move to power shot
+
+
     }
 }
