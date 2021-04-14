@@ -149,11 +149,21 @@ moveteta(teta1);
     }
 
     public void driveForward(double distance) {
+
     }
 
     /**
      * @param angle in degrees
      */
     public void rotate(double angle) {
+    }
+
+    public void drive(double speed){
+        rightMotor.setPower(speed);
+        leftMotor.setPower(speed);
+    }
+    public void stopDriving(){
+        rightMotor.setPower(0);
+        leftMotor.setPower(0);
     }
 }
