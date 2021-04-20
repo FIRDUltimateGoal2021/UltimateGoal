@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.UltimateGoal.Systems;
 
 
-
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -25,45 +24,49 @@ public class DrivingSystem {
     DcMotor rightMotor;
     double v;
     double r;
+
+    boolean startedStopping = false;
+    ElapsedTime timer;
+
     public DrivingSystem(LinearOpMode opMode) {
         this.opMode = opMode;
         leftMotor = opMode.hardwareMap.get(DcMotor.class, "left_drive");
         rightMotor = opMode.hardwareMap.get(DcMotor.class, "right_drive");
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
-        parameters.loggingEnabled      = true;
-        parameters.loggingTag          = "IMU";
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
 
         imu = opMode.hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
     }
-public void moveteta (double teta){
+
+    public void moveteta(double teta) {
         double k;
-        if (teta <0)
-        {
-            k=-1;
+        if (teta < 0) {
+            k = -1;
+        } else {
+            k = 1;
         }
-        else {
-            k= 1;
-        }
-    double dt = 1 / 60f;
-    ElapsedTime timer = new ElapsedTime();
-    angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        for (int g=0;angles.firstAngle<teta;g+= dt) {
+        double dt = 1 / 60f;
+        ElapsedTime timer = new ElapsedTime();
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        for (int g = 0; angles.firstAngle < teta; g += dt) {
 
 
             timer.reset();
 
-            driveByJoystick(v*k,-v*k );
+            driveByJoystick(v * k, -v * k);
             if (timer.seconds() < dt) {
                 opMode.sleep((long) ((dt - timer.seconds()) * 1000));
             }
         }
-            stöp();
+        stöp();
 
-}
+    }
+
     public void driveByJoystick(double horizontal, double vertical) {
         double left = vertical - horizontal;
         double right = vertical + horizontal;
@@ -79,32 +82,34 @@ public void moveteta (double teta){
         Function<Double, Position> func = new Function<Double, Position>() {
             @Override
             public Position apply(Double aDouble) {
-                return new Position(DistanceUnit.METER,0,0,0,0);
+                return new Position(DistanceUnit.METER, 0, 0, 0, 0);
             }
         };
         for (Position pos : way) {
             //
         }
     }
-public void easy (double teta1, double teta2, double dx, double dy){
-moveteta(teta1);
-    double rr =dx*dx+dy*dy;
-    ElapsedTime timer = new ElapsedTime();
 
-    double dt = 1 / 60f;
-    for (double t = 0; t <rr/v; t += dt) {
-        timer.reset();
+    public void easy(double teta1, double teta2, double dx, double dy) {
+        moveteta(teta1);
+        double rr = dx * dx + dy * dy;
+        ElapsedTime timer = new ElapsedTime();
+
+        double dt = 1 / 60f;
+        for (double t = 0; t < rr / v; t += dt) {
+            timer.reset();
 
 
-        driveByJoystick(1, 1);
-        if (timer.seconds() < dt) {
-            opMode.sleep((long) ((dt - timer.seconds()) * 1000));
+            driveByJoystick(1, 1);
+            if (timer.seconds() < dt) {
+                opMode.sleep((long) ((dt - timer.seconds()) * 1000));
+            }
         }
-    }
-    stöp();
+        stöp();
 
-    moveteta(teta2);
-}
+        moveteta(teta2);
+    }
+
     public void driveAutonomouslyBetter(
             double t0, double tn, Function<Double, Position> func
     ) {
@@ -148,6 +153,19 @@ moveteta(teta1);
         rightMotor.setPower(0);
     }
 
+    public void betterStop(){
+        leftMotor.setPower(-1);
+        rightMotor.setPower(-1);
+        if(!startedStopping) {
+            timer = new ElapsedTime();
+            startedStopping = true;
+        }
+        else if(timer.seconds() >= 0.5) {
+            startedStopping = false;
+            stöp();
+        }
+    }
+
     public void driveForward(double distance) {
 
     }
@@ -158,11 +176,12 @@ moveteta(teta1);
     public void rotate(double angle) {
     }
 
-    public void drive(double speed){
+    public void drive(double speed) {
         rightMotor.setPower(speed);
         leftMotor.setPower(speed);
     }
-    public void stopDriving(){
+
+    public void stopDriving() {
         rightMotor.setPower(0);
         leftMotor.setPower(0);
     }

@@ -41,7 +41,7 @@ public class ColorSensor {
             }
         }
 
-        if (hsvValues[1] < 0.5 && hsvValues[2] > 0.5) {
+        if (hsvValues[1] < 0.2 && hsvValues[2] > 0.1) {
             return ColorEnum.WHITE;
         }
         return ColorEnum.DORIAN;
