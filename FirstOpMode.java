@@ -88,11 +88,18 @@ public class FirstOpMode extends LinearOpMode {
         while (opModeIsActive()) {
 
             // Joysticks
-            drivingSystem.driveByJoystick(gamepad2.left_stick_y, -gamepad2.right_stick_x);
+            drivingSystem.driveByJoystick(gamepad2.left_stick_y, gamepad2.right_stick_x);
             shooterSystem.changeAngle(
                     shooterSystem.currentHorizontalAngle
                             - 0.1 * gamepad1.right_stick_y
             );
+            if (ourGamepad1.buttonPress("y")) {
+                shooterSystem.servoCheck0();
+            }
+
+            if (ourGamepad1.buttonPress("a")) {
+                shooterSystem.servoCheck1();
+            }
 
             // Button a: shoot
             if (ourGamepad1.buttonPress("a") && timer.seconds() >= 2 * loadingTime) {

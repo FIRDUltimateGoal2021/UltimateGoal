@@ -74,8 +74,8 @@ public class DrivingSystem {
             left = left * Math.max(Math.abs(left), Math.abs(right));
             right = right * Math.max(Math.abs(left), Math.abs(right));
         }
-        leftMotor.setPower(left);
-        rightMotor.setPower(right);
+        leftMotor.setPower(-left);
+        rightMotor.setPower(-right);
     }
 
     public void driveAutonomously(Position[] way) {
@@ -153,14 +153,13 @@ public class DrivingSystem {
         rightMotor.setPower(0);
     }
 
-    public void betterStop(){
-        leftMotor.setPower(-1);
+    public void betterStop() {
         rightMotor.setPower(-1);
-        if(!startedStopping) {
+        leftMotor.setPower(-1);
+        if (!startedStopping) {
             timer = new ElapsedTime();
             startedStopping = true;
-        }
-        else if(timer.seconds() >= 0.5) {
+        } else if (timer.seconds() >= 0.5) {
             startedStopping = false;
             stöp();
         }
