@@ -21,7 +21,7 @@ public class ShooterSystem {
         motor = opMode.hardwareMap.get(DcMotor.class, "ShootingMotor");
         angleServo = opMode.hardwareMap.get(Servo.class, "AngleServo");
         ammo = opMode.hardwareMap.get(Servo.class, "Ammunition");
-        changeAngle(1);
+        changeAngle(180);
     }
 
     /**
@@ -29,28 +29,22 @@ public class ShooterSystem {
      */
     public void changeAngle(double newHorizontalAngle) {
         // in radians
-        final double servoAngle0 = 0;
-        final double armToShooterRatio = 1.024;
+//        final double servoAngle0 = 0;
+//        final double armToShooterRatio = 1.024;
 
 //        final double newServoAngle = Math.asin(
 //                Math.sin(servoAngle0) + armToShooterRatio * Math.sin(Math.toRadians(newHorizontalAngle))
 //        );
-        final double newServoAngle = Math.toRadians(newHorizontalAngle);
-        if(newServoAngle >= 0 && newServoAngle<= Math.PI) {
-            angleServo.setPosition(newServoAngle / Math.PI);
+//        currentHorizontalAngle = newServoAngle / Math.PI;
+//        angleServo.setPosition(currentHorizontalAngle);
+
+        if(newHorizontalAngle >= 0  && newHorizontalAngle <= 180) {
             currentHorizontalAngle = newHorizontalAngle;
+            angleServo.setPosition(currentHorizontalAngle / 180);
         }
+
         opMode.telemetry.addData("newServoAngle: ", currentHorizontalAngle);
         opMode.telemetry.update();
-
-    }
-
-    public void servoCheck0() {
-        angleServo.setPosition(0);
-    }
-
-    public void servoCheck1() {
-        angleServo.setPosition(1);
     }
 
     /**

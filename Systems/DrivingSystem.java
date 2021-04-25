@@ -22,8 +22,8 @@ public class DrivingSystem {
     LinearOpMode opMode;
     DcMotor leftMotor;
     DcMotor rightMotor;
-    double v;
-    double r;
+    double v = 0.51;
+    double r = 0.16;
 
     boolean startedStopping = false;
     ElapsedTime timer;
@@ -53,9 +53,16 @@ public class DrivingSystem {
         double dt = 1 / 60f;
         ElapsedTime timer = new ElapsedTime();
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        for (int g = 0; angles.firstAngle < teta; g += dt) {
-
-
+        double firstangels = angles.firstAngle;
+        if (firstangels +teta>180)
+        {
+            // firstangels
+        }
+        for (; angles.firstAngle < teta+firstangels && opMode.opModeIsActive();
+             angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES)) {
+            opMode.telemetry.addData("זווית נוכחית",angles);
+            opMode.telemetry.addData("זווית מטרה",teta+firstangels);
+            opMode.telemetry.update();
             timer.reset();
 
             driveByJoystick(v * k, -v * k);
@@ -64,11 +71,11 @@ public class DrivingSystem {
             }
         }
         stöp();
-
     }
 
     public void driveByJoystick(double horizontal, double vertical) {
-        double left = vertical - horizontal;
+        double motorSpeedDifference = 1.05;
+        double left = (vertical - horizontal) * motorSpeedDifference;
         double right = vertical + horizontal;
         if (Math.abs(left) > 1 || Math.abs(right) > 1) {
             left = left * Math.max(Math.abs(left), Math.abs(right));
@@ -98,7 +105,6 @@ public class DrivingSystem {
         double dt = 1 / 60f;
         for (double t = 0; t < rr / v; t += dt) {
             timer.reset();
-
 
             driveByJoystick(1, 1);
             if (timer.seconds() < dt) {
@@ -153,9 +159,9 @@ public class DrivingSystem {
         rightMotor.setPower(0);
     }
 
-    public void betterStop() {
+    public void betterStöp() {
         rightMotor.setPower(-1);
-        leftMotor.setPower(-1);
+        leftMotor.setPower(1);
         if (!startedStopping) {
             timer = new ElapsedTime();
             startedStopping = true;
@@ -165,23 +171,15 @@ public class DrivingSystem {
         }
     }
 
-    public void driveForward(double distance) {
-
-    }
+    public void driveForward(double distance) { }
 
     /**
      * @param angle in degrees
      */
-    public void rotate(double angle) {
-    }
+    public void rotate(double angle) { }
 
     public void drive(double speed) {
         rightMotor.setPower(speed);
         leftMotor.setPower(speed);
-    }
-
-    public void stopDriving() {
-        rightMotor.setPower(0);
-        leftMotor.setPower(0);
     }
 }
