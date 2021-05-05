@@ -32,12 +32,14 @@ package org.firstinspires.ftc.teamcode.UltimateGoal;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.CollectionSystem;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.ColorSensor;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.DrivingSystem;
-import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.ShooterSystem;
-import org.firstinspires.ftc.teamcode.UltimateGoal.Utils.OurGamepad;
 
 
 /**
@@ -53,74 +55,30 @@ import org.firstinspires.ftc.teamcode.UltimateGoal.Utils.OurGamepad;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-/**
- * Use consistant conventions (decide between varName and var_name)
- * PLEASE fix the variable names in ANY part written by Nevo :).
- */
+@TeleOp(name = "Drive to white", group = "Linear Opmode")
+public class WhiteDrive extends LinearOpMode {
 
-@TeleOp(name = "FirstOpMode", group = "Linear Opmode")
-//@Disabled
-public class FirstOpMode extends LinearOpMode {
-
+    ColorSensor colorSensor;
     DrivingSystem drivingSystem;
-    ShooterSystem shooterSystem;
-    CollectionSystem collectionSystem;
-    OurGamepad ourGamepad1;
-    ElapsedTime timer = new ElapsedTime(100);
 
     @Override
     public void runOpMode() {
+        // Declare OpMode members.
         drivingSystem = new DrivingSystem(this);
-        shooterSystem = new ShooterSystem(this);
-        collectionSystem = new CollectionSystem(this);
-        ourGamepad1 = new OurGamepad(gamepad1);
+        colorSensor = new ColorSensor(this);
+        int speed = 1;
 
-        // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        shooterSystem.load();
-        shooterSystem.on();
-        collectionSystem.on();
-
-        final double loadingTime = 1;
-
-        // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-
-            // Joysticks
-            drivingSystem.driveByJoystick(gamepad2.left_stick_y, gamepad2.right_stick_x);
-            shooterSystem.changeAngle(
-                    shooterSystem.currentHorizontalAngle
-                            + 0.5 * gamepad1.right_stick_y
-            );
-
-            // Button a: shoot
-            if (ourGamepad1.buttonPress("a") && timer.seconds() >= 2 * loadingTime) {
-                shooterSystem.shoot();
-                timer.reset();
+            drivingSystem.driveByJoystick(-speed, 0);
+            telemetry.addData("Speed", speed);
+            telemetry.addData("Color", colorSensor.getColor());
+            if (colorSensor.getColor() == ColorSensor.ColorEnum.WHITE) {
+                speed = 0;
+                drivingSystem.betterStöp();
             }
-            // Make sure the shooter is always loaded (unless when shooting)
-            if (timer.seconds() >= loadingTime) {
-                shooterSystem.load();
-            }
-
-            // Button b: toggle the collectionSystem
-            if (ourGamepad1.buttonPress("b")) {
-                collectionSystem.toggle();
-            }
-
-            // Button x:
-            if (ourGamepad1.buttonPress("x")) {
-                drivingSystem.movetheta(45);
-            }
-//
-//            // Button y:
-//            if (ourGamepad1.buttonPress("y")) {
-//                //
-//            }
-
-            ourGamepad1.update();
+            telemetry.update();
         }
     }
-
 }

@@ -79,7 +79,7 @@ public class ShooterSystem {
     }
 
     public void load() {
-        ammo.setPosition(0.5);
+        ammo.setPosition(1);
     }
 
     public void shoot() {

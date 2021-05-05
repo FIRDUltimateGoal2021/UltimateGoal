@@ -43,9 +43,9 @@ public class DrivingSystem {
         imu.initialize(parameters);
     }
 
-    public void moveteta(double teta) {
+    public void movetheta(double theta) {
         double k;
-        if (teta < 0) {
+        if (theta < 0) {
             k = -1;
         } else {
             k = 1;
@@ -54,14 +54,13 @@ public class DrivingSystem {
         ElapsedTime timer = new ElapsedTime();
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         double firstangels = angles.firstAngle;
-        if (firstangels +teta>180)
-        {
+        if (firstangels + theta > 180) {
             // firstangels
         }
-        for (; angles.firstAngle < teta+firstangels && opMode.opModeIsActive();
+        for (; angles.firstAngle < theta + firstangels && opMode.opModeIsActive();
              angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES)) {
-            opMode.telemetry.addData("זווית נוכחית",angles);
-            opMode.telemetry.addData("זווית מטרה",teta+firstangels);
+            opMode.telemetry.addData("זווית נוכחית", angles);
+            opMode.telemetry.addData("זווית מטרה", theta + firstangels);
             opMode.telemetry.update();
             timer.reset();
 
@@ -98,7 +97,7 @@ public class DrivingSystem {
     }
 
     public void easy(double teta1, double teta2, double dx, double dy) {
-        moveteta(teta1);
+        movetheta(teta1);
         double rr = dx * dx + dy * dy;
         ElapsedTime timer = new ElapsedTime();
 
@@ -113,7 +112,7 @@ public class DrivingSystem {
         }
         stöp();
 
-        moveteta(teta2);
+        movetheta(teta2);
     }
 
     public void driveAutonomouslyBetter(
@@ -171,12 +170,14 @@ public class DrivingSystem {
         }
     }
 
-    public void driveForward(double distance) { }
+    public void driveForward(double distance) {
+    }
 
     /**
      * @param angle in degrees
      */
-    public void rotate(double angle) { }
+    public void rotate(double angle) {
+    }
 
     public void drive(double speed) {
         rightMotor.setPower(speed);

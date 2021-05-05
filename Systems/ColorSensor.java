@@ -19,7 +19,8 @@ public class ColorSensor {
 
     public ColorSensor(LinearOpMode opMode) {
         this.opMode = opMode;
-        normalizedColorSensor = opMode.hardwareMap.get(NormalizedColorSensor.class, "color_sensor");
+        normalizedColorSensor = opMode.hardwareMap.get(NormalizedColorSensor.class,
+                "ColorSensor");
     }
 
     public ColorEnum getColor() {
