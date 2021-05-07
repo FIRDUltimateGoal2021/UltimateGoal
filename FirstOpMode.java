@@ -9,7 +9,7 @@
  *
  * Redistributions in binary form must reproduce the above copyright notice, this
  * list of conditions and the following disclaimer in the documentation and/or
- * other materials provided with the distribution.
+ * other matingials provided with the distribution.
  *
  * Neither the name of FIRST nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written permission.
@@ -21,7 +21,7 @@
  * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INtingRUPTION) HOWEVER
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
@@ -36,7 +36,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.CollectionSystem;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.DrivingSystem;
-import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.ShooterSystem;
+import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.ShootingSystem;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Utils.OurGamepad;
 
 
@@ -63,7 +63,7 @@ import org.firstinspires.ftc.teamcode.UltimateGoal.Utils.OurGamepad;
 public class FirstOpMode extends LinearOpMode {
 
     DrivingSystem drivingSystem;
-    ShooterSystem shooterSystem;
+    ShootingSystem shootingSystem;
     CollectionSystem collectionSystem;
     OurGamepad ourGamepad1;
     ElapsedTime timer = new ElapsedTime(100);
@@ -71,16 +71,15 @@ public class FirstOpMode extends LinearOpMode {
     @Override
     public void runOpMode() {
         drivingSystem = new DrivingSystem(this);
-        shooterSystem = new ShooterSystem(this);
+        shootingSystem = new ShootingSystem(this);
         collectionSystem = new CollectionSystem(this);
         ourGamepad1 = new OurGamepad(gamepad1);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        shooterSystem.load();
-        shooterSystem.on();
-        collectionSystem.on();
+//        shootingSystem.on();
+//        collectionSystem.on();
 
         final double loadingTime = 1;
 
@@ -89,19 +88,14 @@ public class FirstOpMode extends LinearOpMode {
 
             // Joysticks
             drivingSystem.driveByJoystick(gamepad2.left_stick_y, gamepad2.right_stick_x);
-            shooterSystem.changeAngle(
-                    shooterSystem.currentHorizontalAngle
-                            + 0.5 * gamepad1.right_stick_y
-            );
+//            shootingSystem.changeAngle(
+//                    shootingSystem.currentAngle
+//                            + 0.5 * gamepad1.right_stick_y
+//            );
 
             // Button a: shoot
-            if (ourGamepad1.buttonPress("a") && timer.seconds() >= 2 * loadingTime) {
-                shooterSystem.shoot();
-                timer.reset();
-            }
-            // Make sure the shooter is always loaded (unless when shooting)
-            if (timer.seconds() >= loadingTime) {
-                shooterSystem.load();
+            if (ourGamepad1.buttonPress("a")) {
+                shootingSystem.shoot();
             }
 
             // Button b: toggle the collectionSystem
@@ -109,15 +103,15 @@ public class FirstOpMode extends LinearOpMode {
                 collectionSystem.toggle();
             }
 
-            // Button x:
+            // Button x: load
             if (ourGamepad1.buttonPress("x")) {
-                drivingSystem.movetheta(45);
+                shootingSystem.load();
             }
-//
-//            // Button y:
-//            if (ourGamepad1.buttonPress("y")) {
-//                //
-//            }
+
+            // Button y:
+            if (ourGamepad1.buttonPress("y")) {
+                shootingSystem.toggle();
+            }
 
             ourGamepad1.update();
         }
