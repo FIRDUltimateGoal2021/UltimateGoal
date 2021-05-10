@@ -87,33 +87,39 @@ public class FirstOpMode extends LinearOpMode {
         while (opModeIsActive()) {
 
             // Joysticks
-            drivingSystem.driveByJoystick(gamepad2.left_stick_y, gamepad2.right_stick_x);
-//            shootingSystem.changeAngle(
-//                    shootingSystem.currentAngle
-//                            + 0.5 * gamepad1.right_stick_y
-//            );
+            drivingSystem.driveByJoystick(-gamepad2.left_stick_y, gamepad2.right_stick_x);
+            shootingSystem.changeAngle(
+                    shootingSystem.currentAngle
+                            + 0.5 * gamepad1.right_stick_y
+            );
 
-            // Button a: shoot
-            if (ourGamepad1.buttonPress("a")) {
-                shootingSystem.shoot();
-            }
-
-            // Button b: toggle the collectionSystem
-            if (ourGamepad1.buttonPress("b")) {
+            // Right Toggle: Toggle Collection System
+            if (ourGamepad1.buttonPress("Rt")) {
                 collectionSystem.toggle();
             }
 
-            // Button x: load
-            if (ourGamepad1.buttonPress("x")) {
-                shootingSystem.load();
-            }
-
-            // Button y:
-            if (ourGamepad1.buttonPress("y")) {
+            // Left Toggle: Toggle Shooting System motor
+            if (ourGamepad1.buttonPress("Lt")) {
                 shootingSystem.toggle();
             }
 
+            // Right Bumper: Toggle Collection System spit
+            if (ourGamepad1.buttonPress("Rb")) {
+                collectionSystem.spit();
+            }
+
+            // Right Bumper: Toggle Shooting System spit
+            if (ourGamepad1.buttonPress("Lb")) {
+                shootingSystem.spit();
+            }
+
+            // Button a: Toggle between loading position and shoot (servo)
+            if (ourGamepad1.buttonPress("a")) {
+                shootingSystem.shootLoad();
+            }
+
             ourGamepad1.update();
+            telemetry.update();
         }
     }
 

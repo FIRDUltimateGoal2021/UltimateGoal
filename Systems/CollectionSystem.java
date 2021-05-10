@@ -22,6 +22,15 @@ public class CollectionSystem {
         }
     }
 
+    public void spit() {
+        if (isOn) {
+            off();
+        } else {
+            motor.setPower(1);
+            isOn = true;
+        }
+    }
+
     public void off() {
         motor.setPower(0);
         isOn = false;

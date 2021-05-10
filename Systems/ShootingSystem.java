@@ -10,26 +10,38 @@ public class ShootingSystem {
     public final DcMotor motor;
     public double currentAngle = 0;
     public boolean isOn = false;
+    public boolean loaded = false;
 
     public ShootingSystem(LinearOpMode opMode) {
         this.opMode = opMode;
         motor = opMode.hardwareMap.get(DcMotor.class, "ShootingMotor");
         angleServo = opMode.hardwareMap.get(Servo.class, "AngleServo");
-        changeAngle(0);
+        load();
     }
 
     public void shoot() {
-        changeAngle(75);
+        changeAngle(-40);
+        loaded = false;
     }
 
     public void load() {
         changeAngle(30);
+        loaded = true;
+    }
+
+    public void shootLoad() {
+        if (loaded) {
+            shoot();
+        } else {
+            load();
+        }
     }
 
     public void changeAngle(double newAngle) {
         double a0 = 90;
-        currentAngle = a0 + newAngle;
-        angleServo.setPosition(currentAngle / 180);
+        currentAngle = newAngle;
+        angleServo.setPosition((currentAngle + a0) / 180);
+        opMode.telemetry.addData("Current Servo Angle: ", newAngle);
     }
 
     public void toggle() {
@@ -40,13 +52,23 @@ public class ShootingSystem {
         }
     }
 
+    public void spit() {
+        if (isOn) {
+            off();
+        } else {
+            motor.setPower(1);
+            isOn = true;
+        }
+
+    }
+
     public void off() {
         motor.setPower(0);
         isOn = false;
     }
 
     public void on() {
-        motor.setPower(1);
+        motor.setPower(-1);
         isOn = true;
     }
 }
