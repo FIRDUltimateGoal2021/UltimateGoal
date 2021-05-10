@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.UltimateGoal.Systems;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -25,6 +26,8 @@ public class DrivingSystem {
     double v = 0.51;
     double r = 0.16;
 
+    double currentAng;
+
     boolean startedStopping = false;
     ElapsedTime timer;
 
@@ -41,6 +44,8 @@ public class DrivingSystem {
 
         imu = opMode.hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
+
+        currentAng = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
     }
 
     public void movetheta(double theta) {
@@ -170,17 +175,59 @@ public class DrivingSystem {
         }
     }
 
+
+    //nati's code
+
+    public void turn(double ang) {
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        double destination = angles.firstAngle + ang;
+
+        if(destination > 180)
+            destination = -360 + destination;
+        else if(destination < -180)
+            destination = 360 + destination;
+
+        double currentTurningAngle = angles.firstAngle;
+
+        int turnSide = -1;
+        if(currentTurningAngle > destination)
+            turnSide = 1;
+
+
+        if(currentTurningAngle > destination) {
+            while (currentTurningAngle > destination) {
+                driveByJoystick(0, turnSide * 0.5);
+                currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+                opMode.telemetry.addData("destination", destination);
+                opMode.telemetry.addData("currentAngle", currentTurningAngle);
+                opMode.telemetry.update();
+            }
+        }
+        else {
+            while (currentTurningAngle < destination) {
+                driveByJoystick(0, turnSide * 0.5);
+                currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+                opMode.telemetry.addData("destination", destination);
+                opMode.telemetry.addData("currentAngle", currentTurningAngle);
+                opMode.telemetry.update();
+            }
+        }
+        driveByJoystick(0,0);
+    }
+
+
+
+
     public void driveForward(double distance) {
     }
 
-    /**
-     * @param angle in degrees
-     */
-    public void rotate(double angle) {
+    public void printXYZ(){
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        opMode.telemetry.addData("1", angles.firstAngle);
+        opMode.telemetry.addData("2", angles.secondAngle);
+        opMode.telemetry.addData("3", angles.thirdAngle);
+        opMode.telemetry.update();
     }
 
-    public void drive(double speed) {
-        rightMotor.setPower(speed);
-        leftMotor.setPower(speed);
-    }
 }
