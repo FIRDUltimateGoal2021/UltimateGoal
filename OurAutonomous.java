@@ -19,20 +19,20 @@ public class OurAutonomous extends LinearOpMode {
     // Park on white line
 
 
-    DrivingSystem drivingSystem;
-    ShootingSystem shootingSystem;
+    DrivingSystem    drivingSystem;
+    ShootingSystem   shootingSystem;
     CollectionSystem collectionSystem;
-    WobbleSystem wobbleSystem;
-    ColorSensor colorSensor;
+    WobbleSystem     wobbleSystem;
+    ColorSensor      colorSensor;
     ElapsedTime timer = new ElapsedTime(100);
 
     @Override
     public void runOpMode() {
-        drivingSystem = new DrivingSystem(this);
-        shootingSystem = new ShootingSystem(this);
+        drivingSystem    = new DrivingSystem(this);
+        shootingSystem   = new ShootingSystem(this);
         collectionSystem = new CollectionSystem(this);
-        wobbleSystem = new WobbleSystem(this);
-        colorSensor = new ColorSensor(this);
+        wobbleSystem     = new WobbleSystem(this);
+        colorSensor      = new ColorSensor(this);
 
         waitForStart();
 
