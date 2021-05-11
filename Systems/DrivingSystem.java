@@ -26,7 +26,7 @@ public class DrivingSystem {
     double v = 0.51;
     double r = 0.16;
 
-    double currentAng;
+    double globalAng;
 
     boolean startedStopping = false;
     ElapsedTime timer;
@@ -45,7 +45,7 @@ public class DrivingSystem {
         imu = opMode.hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
 
-        currentAng = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+        globalAng = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
     }
 
     public void movetheta(double theta) {
@@ -184,9 +184,9 @@ public class DrivingSystem {
         double destination = angles.firstAngle + ang;
 
         if(destination > 180)
-            destination = -360 + destination;
+            destination += -360;
         else if(destination < -180)
-            destination = 360 + destination;
+            destination += 360;
 
         double currentTurningAngle = angles.firstAngle;
 
@@ -194,6 +194,7 @@ public class DrivingSystem {
         if(currentTurningAngle > destination)
             turnSide = 1;
 
+        globalAng = destination;
 
         if(currentTurningAngle > destination) {
             while (currentTurningAngle > destination) {
@@ -216,10 +217,27 @@ public class DrivingSystem {
         driveByJoystick(0,0);
     }
 
+    public void driveForward(double time, double speed) {
+        timer.startTime();
+        while(timer.seconds() < time) {
+            double correction = angleCorrection();
+            driveByJoystick(speed, correction * 0.1);
+        }
+        driveByJoystick(0,0);
+    }
 
+    private double angleCorrection(){
+        double ang = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+        if(ang > 90 && globalAng < -90)
+            return -1;
+        if(ang < -90 && globalAng > 90)
+            return 1;
+        if(ang > globalAng)
+            return 1;
+        if(ang < globalAng)
+            return -1;
 
-
-    public void driveForward(double distance) {
+        return 0;
     }
 
     public void printXYZ(){
