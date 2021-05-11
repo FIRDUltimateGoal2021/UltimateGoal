@@ -20,12 +20,12 @@ public class ShootingSystem {
     }
 
     public void shoot() {
-        changeAngle(-40);
+        changeAngle(-55);
         loaded = false;
     }
 
     public void load() {
-        changeAngle(30);
+        changeAngle(-40);
         loaded = true;
     }
 

@@ -64,7 +64,7 @@ public class nutiAutonomousOpMode extends LinearOpMode {
         waitForStart();
 
         DrivingSystem = new DrivingSystem(this);
-        OurGamepad1 = new OurGamepad(gamepad1);
+        OurGamepad1 = new OurGamepad(gamepad2);
 
         while(opModeIsActive()){
             if(OurGamepad1.buttonPress("x")){

@@ -38,6 +38,10 @@ import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.CollectionSystem;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.DrivingSystem;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.ShootingSystem;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Utils.OurGamepad;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvInternalCamera;
+import org.openftc.easyopencv.OpenCvPipeline;
 
 
 /**
@@ -66,6 +70,8 @@ public class FirstOpMode extends LinearOpMode {
     ShootingSystem shootingSystem;
     CollectionSystem collectionSystem;
     OurGamepad ourGamepad1;
+    OpenCvInternalCamera phoneCam;
+//    SkystoneDeterminationPipeline piepline;
     ElapsedTime timer = new ElapsedTime(100);
 
     @Override
@@ -75,11 +81,11 @@ public class FirstOpMode extends LinearOpMode {
         collectionSystem = new CollectionSystem(this);
         ourGamepad1 = new OurGamepad(gamepad1);
 
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
+
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-
-//        shootingSystem.on();
-//        collectionSystem.on();
 
         final double loadingTime = 1;
 
@@ -122,5 +128,9 @@ public class FirstOpMode extends LinearOpMode {
             telemetry.update();
         }
     }
+
+//    public static class SkystoneDeterminationPipeline extends OpenCvPipeline {
+//
+//    }
 
 }
