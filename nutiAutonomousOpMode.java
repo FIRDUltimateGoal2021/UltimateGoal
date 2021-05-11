@@ -30,10 +30,8 @@
 
 package org.firstinspires.ftc.teamcode.UltimateGoal;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.DrivingSystem;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Utils.OurGamepad;

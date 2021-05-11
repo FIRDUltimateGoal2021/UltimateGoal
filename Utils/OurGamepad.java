@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.UltimateGoal.Utils;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 public class OurGamepad {

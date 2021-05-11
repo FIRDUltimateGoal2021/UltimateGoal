@@ -29,7 +29,6 @@
 
 package org.firstinspires.ftc.teamcode.UltimateGoal;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -38,10 +37,8 @@ import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.CollectionSystem;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.DrivingSystem;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.ShootingSystem;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Utils.OurGamepad;
-import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvInternalCamera;
-import org.openftc.easyopencv.OpenCvPipeline;
 
 
 /**
@@ -57,7 +54,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-/**
+/*
  * Use consistant conventions (decide between varName and var_name)
  * PLEASE fix the variable names in ANY part written by Nevo :).
  */
