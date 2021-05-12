@@ -71,9 +71,6 @@ public class FirstOpMode extends LinearOpMode {
     CollectionSystem collectionSystem;
     OurGamepad ourGamepad1;
     
-    OpenCvInternalCamera phoneCam;
-    OurPipeline pipeline;
-    
     ElapsedTime timer = new ElapsedTime(100);
 
     @Override
@@ -82,21 +79,6 @@ public class FirstOpMode extends LinearOpMode {
         shootingSystem = new ShootingSystem(this);
         collectionSystem = new CollectionSystem(this);
         ourGamepad1 = new OurGamepad(gamepad1);
-
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
-        pipeline = new OurPipeline();
-        phoneCam.setPipeline(pipeline);
-        phoneCam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
-
-        phoneCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
-        {
-            @Override
-            public void onOpened()
-            {
-                phoneCam.startStreaming(320,240, OpenCvCameraRotation.SIDEWAYS_LEFT);
-            }
-        });
         
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -112,9 +94,6 @@ public class FirstOpMode extends LinearOpMode {
                     shootingSystem.currentAngle
                             + 0.5 * gamepad1.right_stick_y
             );
-
-            telemetry.addData("Analysis", pipeline.getAnalysis());
-            telemetry.addData("Position", pipeline.position);
 
             // Right Toggle: Toggle Collection System
             if (ourGamepad1.buttonPress("Rt")) {

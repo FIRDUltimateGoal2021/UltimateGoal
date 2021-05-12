@@ -54,30 +54,30 @@ import org.firstinspires.ftc.teamcode.UltimateGoal.Utils.OurGamepad;
 
 public class nutiAutonomousOpMode extends LinearOpMode {
 
-    DrivingSystem DrivingSystem;
+    DrivingSystem drivingSystem;
     OurGamepad OurGamepad1;
 
     @Override
     public void runOpMode() {
         waitForStart();
 
-        DrivingSystem = new DrivingSystem(this);
-        OurGamepad1 = new OurGamepad(gamepad2);
+        drivingSystem = new DrivingSystem(this);
+        OurGamepad1 = new OurGamepad(gamepad1);
 
         while(opModeIsActive()){
             if(OurGamepad1.buttonPress("x")){
-                DrivingSystem.turn(90);
+                drivingSystem.driveForward(5,1,100);
             }
             if(OurGamepad1.buttonPress("y")){
-                DrivingSystem.turn(-45);
+                drivingSystem.driveForward(5,1,150);
             }
 
             if(OurGamepad1.buttonPress("a")){
-                DrivingSystem.driveForward(3,0.5);
-                DrivingSystem.turn(120);
-                DrivingSystem.driveForward(3,0.5);
-                DrivingSystem.turn(120);
-                DrivingSystem.driveForward(3,0.5);
+                drivingSystem.driveForward(5,1,90);
+//                drivingSystem.turn(120);
+//                drivingSystem.driveForward(3,1);
+//                drivingSystem.turn(120);
+//                drivingSystem.driveForward(3,1);
             }
 
             OurGamepad1.update();

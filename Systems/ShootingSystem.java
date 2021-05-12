@@ -7,7 +7,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class ShootingSystem {
     public final LinearOpMode opMode;
     public final Servo angleServo;
+    public final Servo angleServo2;
     public final DcMotor motor;
+    public double a0 = 90;
     public double currentAngle = 0;
     public boolean isOn = false;
     public boolean loaded = false;
@@ -16,16 +18,18 @@ public class ShootingSystem {
         this.opMode = opMode;
         motor = opMode.hardwareMap.get(DcMotor.class, "ShootingMotor");
         angleServo = opMode.hardwareMap.get(Servo.class, "AngleServo");
+        angleServo2 = opMode.hardwareMap.get(Servo.class, "AngleServo2");
         load();
+        currentAngle = angleServo.getPosition() * 180;
     }
 
     public void shoot() {
-        changeAngle(-55);
+        changeAngle(47);
         loaded = false;
     }
 
     public void load() {
-        changeAngle(-40);
+        changeAngle(10);
         loaded = true;
     }
 
@@ -38,9 +42,9 @@ public class ShootingSystem {
     }
 
     public void changeAngle(double newAngle) {
-        double a0 = 90;
         currentAngle = newAngle;
         angleServo.setPosition((currentAngle + a0) / 180);
+        angleServo2.setPosition((currentAngle + a0) / 180);
         opMode.telemetry.addData("Current Servo Angle: ", newAngle);
     }
 

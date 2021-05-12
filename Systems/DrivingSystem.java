@@ -15,32 +15,34 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.teamcode.UltimateGoal.Utils.PIDController;
 
 
 public class DrivingSystem {
-    Orientation angles;
-    BNO055IMU imu;
+    Orientation  angles;
+    BNO055IMU    imu;
     LinearOpMode opMode;
-    DcMotor leftMotor;
-    DcMotor rightMotor;
-    double v = 0.51;
-    double r = 0.16;
+    DcMotor      leftMotor;
+    DcMotor      rightMotor;
+    double       v = 0.51;
+    double       r = 0.16;
+    PIDController pid = new PIDController(0.01, 0.0, 0.0);
 
     double globalAng;
 
-    boolean startedStopping = false;
-    ElapsedTime timer;
+    boolean     startedStopping = false;
+    ElapsedTime timer           = new ElapsedTime();
 
     public DrivingSystem(LinearOpMode opMode) {
         this.opMode = opMode;
-        leftMotor = opMode.hardwareMap.get(DcMotor.class, "left_drive");
-        rightMotor = opMode.hardwareMap.get(DcMotor.class, "right_drive");
+        leftMotor   = opMode.hardwareMap.get(DcMotor.class, "left_drive");
+        rightMotor  = opMode.hardwareMap.get(DcMotor.class, "right_drive");
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
-        parameters.loggingEnabled = true;
-        parameters.loggingTag = "IMU";
+        parameters.loggingEnabled      = true;
+        parameters.loggingTag          = "IMU";
 
         imu = opMode.hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
@@ -78,11 +80,10 @@ public class DrivingSystem {
     }
 
     public void driveByJoystick(double horizontal, double vertical) {
-        double motorSpeedDifference = 1.05;
-        double left = (vertical - horizontal) * motorSpeedDifference;
+        double left = vertical - horizontal;
         double right = vertical + horizontal;
         if (Math.abs(left) > 1 || Math.abs(right) > 1) {
-            left = left * Math.max(Math.abs(left), Math.abs(right));
+            left  = left * Math.max(Math.abs(left), Math.abs(right));
             right = right * Math.max(Math.abs(left), Math.abs(right));
         }
         leftMotor.setPower(-left);
@@ -133,9 +134,9 @@ public class DrivingSystem {
             Position current;
             Position after;
 
-            before = func.apply(t - dt);
+            before  = func.apply(t - dt);
             current = func.apply(t);
-            after = func.apply(t + dt);
+            after   = func.apply(t + dt);
 
             double vxAfter = (after.x - current.x) / dt;
             double vyAfter = (after.y - current.y) / dt;
@@ -167,7 +168,7 @@ public class DrivingSystem {
         rightMotor.setPower(-1);
         leftMotor.setPower(1);
         if (!startedStopping) {
-            timer = new ElapsedTime();
+            timer           = new ElapsedTime();
             startedStopping = true;
         } else if (timer.seconds() >= 0.5) {
             startedStopping = false;
@@ -183,20 +184,20 @@ public class DrivingSystem {
 
         double destination = angles.firstAngle + ang;
 
-        if(destination > 180)
-            destination += -360;
-        else if(destination < -180)
+        if (destination > 180)
+            destination -= 360;
+        else if (destination < -180)
             destination += 360;
 
         double currentTurningAngle = angles.firstAngle;
 
         int turnSide = -1;
-        if(currentTurningAngle > destination)
+        if (currentTurningAngle > destination)
             turnSide = 1;
 
         globalAng = destination;
 
-        if(currentTurningAngle > destination) {
+        if (currentTurningAngle > destination) {
             while (currentTurningAngle > destination) {
                 driveByJoystick(0, turnSide * 0.5);
                 currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
@@ -204,8 +205,7 @@ public class DrivingSystem {
                 opMode.telemetry.addData("currentAngle", currentTurningAngle);
                 opMode.telemetry.update();
             }
-        }
-        else {
+        } else {
             while (currentTurningAngle < destination) {
                 driveByJoystick(0, turnSide * 0.5);
                 currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
@@ -214,33 +214,38 @@ public class DrivingSystem {
                 opMode.telemetry.update();
             }
         }
-        driveByJoystick(0,0);
+        stöp();
     }
 
-    public void driveForward(double time, double speed) {
+    public void driveForward(double time, double speed, double devideBy) {
+        ElapsedTime timer = new ElapsedTime();
         timer.startTime();
-        while(timer.seconds() < time) {
-            double correction = angleCorrection();
-            driveByJoystick(speed, correction * 0.1);
+        while (timer.seconds() < time) {
+            double correction = angleCorrection()/devideBy;
+            driveByJoystick(speed, correction);
         }
-        driveByJoystick(0,0);
+        stöp();
     }
 
-    private double angleCorrection(){
+    public void driveForwardNoCorrection(double time, double speed) {
+        ElapsedTime timer = new ElapsedTime();
+        timer.startTime();
+        while (timer.seconds() < time) {
+            driveByJoystick(speed, 0);
+        }
+        stöp();
+    }
+
+    private double angleCorrection() {
         double ang = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
-        if(ang > 90 && globalAng < -90)
-            return -1;
-        if(ang < -90 && globalAng > 90)
-            return 1;
-        if(ang > globalAng)
-            return 1;
-        if(ang < globalAng)
-            return -1;
-
-        return 0;
+        if (ang > 90 && globalAng < -90)
+            return ((180 - ang) - (-180 - globalAng));
+        if (ang < -90 && globalAng > 90)
+            return ((-180 - globalAng) - (180 - ang));
+        return (ang - globalAng);
     }
 
-    public void printXYZ(){
+    public void printXYZ() {
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         opMode.telemetry.addData("1", angles.firstAngle);
         opMode.telemetry.addData("2", angles.secondAngle);
