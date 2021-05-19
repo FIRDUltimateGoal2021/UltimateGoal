@@ -66,14 +66,14 @@ public class nutiAutonomousOpMode extends LinearOpMode {
 
         while(opModeIsActive()){
             if(OurGamepad1.buttonPress("x")){
-                drivingSystem.driveForward(5,1,100);
+                drivingSystem.driveForward(5,1,20);
             }
             if(OurGamepad1.buttonPress("y")){
-                drivingSystem.driveForward(5,1,150);
+                drivingSystem.driveForward(5,1,5);
             }
 
             if(OurGamepad1.buttonPress("a")){
-                drivingSystem.driveForward(5,1,90);
+                drivingSystem.driveForward(5,0.8,5);
 //                drivingSystem.turn(120);
 //                drivingSystem.driveForward(3,1);
 //                drivingSystem.turn(120);

@@ -245,6 +245,11 @@ public class DrivingSystem {
         return (ang - globalAng);
     }
 
+
+    private void updateGlobalAng(){
+        globalAng = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+    }
+
     public void printXYZ() {
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         opMode.telemetry.addData("1", angles.firstAngle);

@@ -23,7 +23,7 @@ public class ShootingSystem {
     }
 
     public void shoot() {
-        changeAngle(17);
+        changeAngle(20);
         loaded = false;
     }
 

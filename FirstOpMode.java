@@ -37,11 +37,6 @@ import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.CollectionSystem;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.DrivingSystem;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.ShootingSystem;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Utils.OurGamepad;
-import org.firstinspires.ftc.teamcode.UltimateGoal.Utils.OurPipeline;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvInternalCamera;
 
 
 /**
