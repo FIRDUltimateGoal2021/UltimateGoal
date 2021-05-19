@@ -88,12 +88,17 @@ public class FirstOpMode extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
+            telemetry.addData("right: ", shootingSystem.angleServo.getPosition());
+            telemetry.addData("left: ", shootingSystem.angleServo2.getPosition());
+
             // Joysticks
             drivingSystem.driveByJoystick(-gamepad2.left_stick_y, gamepad2.right_stick_x);
             shootingSystem.changeAngle(
                     shootingSystem.currentAngle
                             + 0.5 * gamepad1.right_stick_y
             );
+
+            telemetry.addData("Servo Angle: ", shootingSystem.currentAngle);
 
             // Right Toggle: Toggle Collection System
             if (ourGamepad1.buttonPress("Rt")) {
@@ -116,7 +121,7 @@ public class FirstOpMode extends LinearOpMode {
             }
 
             // Button a: Toggle between loading position and shoot (servo)
-            if (ourGamepad1.buttonPress("a")) {
+            if (ourGamepad1.buttonPress("y")) {
                 shootingSystem.shootLoad();
             }
 
