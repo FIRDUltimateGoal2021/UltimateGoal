@@ -34,7 +34,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.DrivingSystem;
+import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.ShootingSystem;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Utils.OurGamepad;
+
+import java.net.HttpURLConnection;
 
 
 /**
@@ -56,29 +59,41 @@ public class nutiAutonomousOpMode extends LinearOpMode {
 
     DrivingSystem drivingSystem;
     OurGamepad OurGamepad1;
+    ShootingSystem shootingSystem;
 
     @Override
     public void runOpMode() {
         waitForStart();
 
         drivingSystem = new DrivingSystem(this);
+        shootingSystem = new ShootingSystem(this);
         OurGamepad1 = new OurGamepad(gamepad1);
 
         while(opModeIsActive()){
-            if(OurGamepad1.buttonPress("x")){
-                drivingSystem.driveForward(5,1,20);
-            }
-            if(OurGamepad1.buttonPress("y")){
-                drivingSystem.driveForward(5,1,5);
+            if(OurGamepad1.buttonPress("a")){
+                drivingSystem.turn(90);
             }
 
-            if(OurGamepad1.buttonPress("a")){
-                drivingSystem.driveForward(5,0.8,5);
-//                drivingSystem.turn(120);
-//                drivingSystem.driveForward(3,1);
-//                drivingSystem.turn(120);
-//                drivingSystem.driveForward(3,1);
+            if(OurGamepad1.buttonPress("b")){
+                drivingSystem.driveToWhite(0.5);
+                drivingSystem.driveForward(0.5,-0.5);
+                drivingSystem.turn(180);
+                shootingSystem.shoot();
             }
+
+            if(OurGamepad1.buttonPress("y")){
+                drivingSystem.driveToWhite(0.5);
+            }
+
+            if(OurGamepad1.buttonPress("x")){
+                drivingSystem.driveForward(3,0.5);
+                drivingSystem.turn(120);
+                drivingSystem.driveForward(4,0.5);
+                drivingSystem.turn(120);
+                drivingSystem.driveForward(4,0.5);
+            }
+
+
 
             OurGamepad1.update();
         }

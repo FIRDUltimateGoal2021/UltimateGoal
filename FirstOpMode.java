@@ -110,11 +110,6 @@ public class FirstOpMode extends LinearOpMode {
                 collectionSystem.spit();
             }
 
-            // Right Bumper: Toggle Shooting System spit
-            if (ourGamepad1.buttonPress("Lb")) {
-                shootingSystem.spit();
-            }
-
             // Button a: Toggle between loading position and shoot (servo)
             if (ourGamepad1.buttonPress("y")) {
                 shootingSystem.shootLoad();

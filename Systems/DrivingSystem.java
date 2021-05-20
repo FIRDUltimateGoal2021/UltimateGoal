@@ -26,10 +26,10 @@ public class DrivingSystem {
     DcMotor      rightMotor;
     double       v = 0.51;
     double       r = 0.16;
-    PIDController pid = new PIDController(0.01, 0.0, 0.0);
 
     double globalAng;
 
+    ColorSensor colorSensor;
     boolean     startedStopping = false;
     ElapsedTime timer           = new ElapsedTime();
 
@@ -47,6 +47,7 @@ public class DrivingSystem {
         imu = opMode.hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
 
+        colorSensor = new ColorSensor(opMode);
         globalAng = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
     }
 
@@ -90,75 +91,6 @@ public class DrivingSystem {
         rightMotor.setPower(-right);
     }
 
-    public void driveAutonomously(Position[] way) {
-        Function<Double, Position> func = new Function<Double, Position>() {
-            @Override
-            public Position apply(Double aDouble) {
-                return new Position(DistanceUnit.METER, 0, 0, 0, 0);
-            }
-        };
-        for (Position pos : way) {
-            //
-        }
-    }
-
-    public void easy(double teta1, double teta2, double dx, double dy) {
-        movetheta(teta1);
-        double rr = dx * dx + dy * dy;
-        ElapsedTime timer = new ElapsedTime();
-
-        double dt = 1 / 60f;
-        for (double t = 0; t < rr / v; t += dt) {
-            timer.reset();
-
-            driveByJoystick(1, 1);
-            if (timer.seconds() < dt) {
-                opMode.sleep((long) ((dt - timer.seconds()) * 1000));
-            }
-        }
-        stöp();
-
-        movetheta(teta2);
-    }
-
-    public void driveAutonomouslyBetter(
-            double t0, double tn, Function<Double, Position> func
-    ) {
-        ElapsedTime timer = new ElapsedTime();
-
-        double dt = 1 / 60f;
-        for (double t = t0; t < tn && opMode.opModeIsActive(); t += dt) {
-            timer.reset();
-
-            Position before;
-            Position current;
-            Position after;
-
-            before  = func.apply(t - dt);
-            current = func.apply(t);
-            after   = func.apply(t + dt);
-
-            double vxAfter = (after.x - current.x) / dt;
-            double vyAfter = (after.y - current.y) / dt;
-
-            double vxBefore = (current.x - before.x) / dt;
-            double vyBefore = (current.y - before.y) / dt;
-
-            double ax = (vxAfter - vxBefore) / dt;
-            double ay = (vyAfter - vyBefore) / dt;
-
-            double theta = Math.atan2(vxAfter, vyAfter);
-            double aRadial = ay * Math.cos(theta) + ax * Math.sin(theta);
-            double aTangent = ay * Math.sin(theta) - ax * Math.cos(theta);
-
-            driveByJoystick(aTangent, aRadial);
-            if (timer.seconds() < dt) {
-                opMode.sleep((long) ((dt - timer.seconds()) * 1000));
-            }
-        }
-        stöp();
-    }
-
     public void stöp() {
         leftMotor.setPower(0);
         rightMotor.setPower(0);
@@ -176,62 +108,67 @@ public class DrivingSystem {
         }
     }
 
+    public void turn(double changeAng) {
+        double angle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
 
-    //nati's code
-
-    public void turn(double ang) {
-        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-
-        double destination = angles.firstAngle + ang;
+        double destination = angle + changeAng;
 
         if (destination > 180)
             destination -= 360;
         else if (destination < -180)
             destination += 360;
 
-        double currentTurningAngle = angles.firstAngle;
+        double currentTurningAngle = angle;
 
-        int turnSide = -1;
-        if (currentTurningAngle > destination)
-            turnSide = 1;
-
-        globalAng = destination;
-
-        if (currentTurningAngle > destination) {
+        if (currentTurningAngle > 90 && destination < -90){
+            while(currentTurningAngle > 0){
+                driveByJoystick(0, -0.5);
+                currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+            }
+            while(currentTurningAngle < destination){
+                driveByJoystick(0, -0.5);
+                currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+            }
+        }
+        else if (currentTurningAngle < -90 && destination > 90){
+            while(currentTurningAngle < 0){
+                driveByJoystick(0, 0.5);
+                currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+            }
+            while(currentTurningAngle > destination){
+                driveByJoystick(0, 0.5);
+                currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+            }
+        }
+        else if (currentTurningAngle > destination) {
             while (currentTurningAngle > destination) {
-                driveByJoystick(0, turnSide * 0.5);
+                driveByJoystick(0, 0.5);
                 currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
-                opMode.telemetry.addData("destination", destination);
-                opMode.telemetry.addData("currentAngle", currentTurningAngle);
-                opMode.telemetry.update();
             }
-        } else {
+        } else{
             while (currentTurningAngle < destination) {
-                driveByJoystick(0, turnSide * 0.5);
+                driveByJoystick(0, -0.5);
                 currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
-                opMode.telemetry.addData("destination", destination);
-                opMode.telemetry.addData("currentAngle", currentTurningAngle);
-                opMode.telemetry.update();
             }
         }
+        globalAng = destination;
         stöp();
     }
 
-    public void driveForward(double time, double speed, double devideBy) {
+    public void driveForward(double time, double speed) {
         ElapsedTime timer = new ElapsedTime();
         timer.startTime();
         while (timer.seconds() < time) {
-            double correction = angleCorrection()/devideBy;
-            driveByJoystick(speed, correction);
+            double correction = angleCorrection()/20;
+            driveByJoystick(-speed, correction);
         }
         stöp();
     }
 
-    public void driveForwardNoCorrection(double time, double speed) {
-        ElapsedTime timer = new ElapsedTime();
-        timer.startTime();
-        while (timer.seconds() < time) {
-            driveByJoystick(speed, 0);
+    public void driveToWhite(double speed){
+        while(colorSensor.getColor() != ColorSensor.ColorEnum.WHITE){
+            double correction = angleCorrection()/20;
+            driveByJoystick(-speed, correction);
         }
         stöp();
     }
@@ -243,11 +180,6 @@ public class DrivingSystem {
         if (ang < -90 && globalAng > 90)
             return ((-180 - globalAng) - (180 - ang));
         return (ang - globalAng);
-    }
-
-
-    private void updateGlobalAng(){
-        globalAng = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
     }
 
     public void printXYZ() {

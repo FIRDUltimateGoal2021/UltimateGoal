@@ -19,11 +19,10 @@ public class ShootingSystem {
         motor = opMode.hardwareMap.get(DcMotor.class, "ShootingMotor");
         angleServo = opMode.hardwareMap.get(Servo.class, "AngleServoRight");
         angleServo2 = opMode.hardwareMap.get(Servo.class, "AngleServoLeft");
-//        load();
     }
 
     public void shoot() {
-        changeAngle(20);
+        changeAngle(28);
         loaded = false;
     }
 
@@ -53,16 +52,6 @@ public class ShootingSystem {
         } else {
             on();
         }
-    }
-
-    public void spit() {
-        if (isOn) {
-            off();
-        } else {
-            motor.setPower(1);
-            isOn = true;
-        }
-
     }
 
     public void off() {
