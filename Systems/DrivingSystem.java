@@ -168,7 +168,7 @@ public class DrivingSystem {
             double correction = angleCorrection() / 20;
             driveByJoystick(-speed, correction);
         }
-        betterStöp();
+        stöp();
     }
 
     public void driveToBlue(double speed) {
