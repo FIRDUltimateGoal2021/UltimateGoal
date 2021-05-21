@@ -86,13 +86,15 @@ public class nutiAutonomousOpMode extends LinearOpMode {
                 drivingSystem.turn(90, 0.5);
                 drivingSystem.driveForward(40, 0.5);
                 drivingSystem.driveForward(40, -0.5);
-                drivingSystem.driveForward(-90, 0);
+                drivingSystem.turn(-90, 0);
                 drivingSystem.driveForward(140, -0.5);
                 shootingSystem.toggle();
                 drivingSystem.turn(180, 0);
-                shootingSystem.shoot();
+                shootingSystem.shootLoad();
                 shootingSystem.toggle();
                 drivingSystem.driveForward(10, 0.5);
+                shootingSystem.shootLoad();
+
             }
 
             if (OurGamepad1.buttonPress("x")) {
