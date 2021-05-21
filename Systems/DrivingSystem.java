@@ -21,36 +21,36 @@ import org.firstinspires.ftc.teamcode.UltimateGoal.Utils.PIDController;
 
 public class DrivingSystem {
 
-    static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
-    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
-    static final double     WHEEL_DIAMETER_MMS   = 116 ;     // For figuring circumference
-    static final double     COUNTS_PER_MM         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+    static final double COUNTS_PER_MOTOR_REV = 1440;    // eg: TETRIX Motor Encoder
+    static final double DRIVE_GEAR_REDUCTION = 1.0;     // This is < 1.0 if geared UP
+    static final double WHEEL_DIAMETER_MMS = 116;     // For figuring circumference
+    static final double COUNTS_PER_MM = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_MMS * 3.1415);
 
-    Orientation  angles;
-    BNO055IMU    imu;
+    Orientation angles;
+    BNO055IMU imu;
     LinearOpMode opMode;
-    DcMotor      leftMotor;
-    DcMotor      rightMotor;
-    double       v = 0.51;
-    double       r = 0.16;
+    DcMotor leftMotor;
+    DcMotor rightMotor;
+    double v = 0.51;
+    double r = 0.16;
 
     double globalAng;
 
     ColorSensor colorSensor;
-    boolean     startedStopping = false;
-    ElapsedTime timer           = new ElapsedTime();
+    boolean startedStopping = false;
+    ElapsedTime timer = new ElapsedTime();
 
     public DrivingSystem(LinearOpMode opMode) {
         this.opMode = opMode;
-        leftMotor   = opMode.hardwareMap.get(DcMotor.class, "left_drive");
-        rightMotor  = opMode.hardwareMap.get(DcMotor.class, "right_drive");
+        leftMotor = opMode.hardwareMap.get(DcMotor.class, "left_drive");
+        rightMotor = opMode.hardwareMap.get(DcMotor.class, "right_drive");
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
-        parameters.loggingEnabled      = true;
-        parameters.loggingTag          = "IMU";
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
 
         imu = opMode.hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
@@ -65,7 +65,7 @@ public class DrivingSystem {
         double left = vertical - horizontal;
         double right = vertical + horizontal;
         if (Math.abs(left) > 1 || Math.abs(right) > 1) {
-            left  = left / Math.max(Math.abs(left), Math.abs(right));
+            left = left / Math.max(Math.abs(left), Math.abs(right));
             right = right / Math.max(Math.abs(left), Math.abs(right));
         }
         leftMotor.setPower(-left);
@@ -81,7 +81,7 @@ public class DrivingSystem {
         rightMotor.setPower(-1);
         leftMotor.setPower(1);
         if (!startedStopping) {
-            timer           = new ElapsedTime();
+            timer = new ElapsedTime();
             startedStopping = true;
         } else if (timer.seconds() >= 0.5) {
             startedStopping = false;
@@ -89,7 +89,7 @@ public class DrivingSystem {
         }
     }
 
-    public void turn(double changeAng,double forwardSpeed) {
+    public void turn(double changeAng, double forwardSpeed) {
         double angle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
 
         double destination = angle + changeAng;
@@ -101,32 +101,30 @@ public class DrivingSystem {
 
         double currentTurningAngle = angle;
 
-        if (currentTurningAngle > 90 && destination < -90){
-            while(currentTurningAngle > 0){
+        if (currentTurningAngle > 90 && destination < -90) {
+            while (currentTurningAngle > 0) {
                 driveByJoystick(-forwardSpeed, -0.5);
                 currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
             }
-            while(currentTurningAngle < destination){
+            while (currentTurningAngle < destination) {
                 driveByJoystick(-forwardSpeed, -0.5);
                 currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
             }
-        }
-        else if (currentTurningAngle < -90 && destination > 90){
-            while(currentTurningAngle < 0){
+        } else if (currentTurningAngle < -90 && destination > 90) {
+            while (currentTurningAngle < 0) {
                 driveByJoystick(-forwardSpeed, 0.5);
                 currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
             }
-            while(currentTurningAngle > destination){
-                driveByJoystick(-forwardSpeed, 0.5);
-                currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
-            }
-        }
-        else if (currentTurningAngle > destination) {
             while (currentTurningAngle > destination) {
                 driveByJoystick(-forwardSpeed, 0.5);
                 currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
             }
-        } else{
+        } else if (currentTurningAngle > destination) {
+            while (currentTurningAngle > destination) {
+                driveByJoystick(-forwardSpeed, 0.5);
+                currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+            }
+        } else {
             while (currentTurningAngle < destination) {
                 driveByJoystick(-forwardSpeed, -0.5);
                 currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
@@ -139,16 +137,32 @@ public class DrivingSystem {
     public void driveForward(double distance, double speed) {
         resetEncoder();
 
-        while (getDistance() <= distance*10) {
-            double correction = angleCorrection()/20;
+        while (getDistance() <= distance * 10) {
+            double correction = angleCorrection() / 20;
             driveByJoystick(-speed, correction);
         }
         stöp();
     }
 
-    public void driveToWhite(double speed){
-        while(colorSensor.getColor() != ColorSensor.ColorEnum.WHITE){
-            double correction = angleCorrection()/20;
+    public void driveToWhite(double speed) {
+        while (colorSensor.getColor() != ColorSensor.ColorEnum.WHITE) {
+            double correction = angleCorrection() / 20;
+            driveByJoystick(-speed, correction);
+        }
+        stöp();
+    }
+
+    public void driveToBlue(double speed) {
+        while (colorSensor.getColor() != ColorSensor.ColorEnum.BLUE) {
+            double correction = angleCorrection() / 20;
+            driveByJoystick(-speed, correction);
+        }
+        stöp();
+    }
+
+    public void driveToRed(double speed) {
+        while (colorSensor.getColor() != ColorSensor.ColorEnum.RED) {
+            double correction = angleCorrection() / 20;
             driveByJoystick(-speed, correction);
         }
         stöp();
@@ -163,16 +177,16 @@ public class DrivingSystem {
         return (ang - globalAng);
     }
 
-    void resetEncoder(){
+    void resetEncoder() {
         rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    double getDistance(){
-        double averagePosition = (rightMotor.getCurrentPosition()-leftMotor.getCurrentPosition())/2d;
-        return averagePosition / COUNTS_PER_MM;
+    double getDistance() {
+        double averagePosition = (rightMotor.getCurrentPosition() - leftMotor.getCurrentPosition()) / 2d;
+        return Math.abs(averagePosition / COUNTS_PER_MM);
     }
 
     public void printXYZ() {

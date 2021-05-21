@@ -45,15 +45,15 @@ import java.net.HttpURLConnection;
  * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
  * of the FTC Driver Station. When an selection is made from the menu, the corresponding OpMode
  * class is instantiated on the Robot Controller and executed.
- *
+ * <p>
  * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
  * It includes all the skeletal structure that all linear OpModes contain.
- *
+ * <p>
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="nutiAutonomousOpMode", group="Linear Opmode")
+@TeleOp(name = "nutiAutonomousOpMode", group = "Linear Opmode")
 
 public class nutiAutonomousOpMode extends LinearOpMode {
 
@@ -69,28 +69,38 @@ public class nutiAutonomousOpMode extends LinearOpMode {
         shootingSystem = new ShootingSystem(this);
         OurGamepad1 = new OurGamepad(gamepad1);
 
-        while(opModeIsActive()){
-            if(OurGamepad1.buttonPress("a")){
-                drivingSystem.driveForward(300,0.5);
+        while (opModeIsActive()) {
+            if (OurGamepad1.buttonPress("a")) {
+                drivingSystem.driveForward(300, 0.5);
             }
 
-            if(OurGamepad1.buttonPress("b")){
+            if (OurGamepad1.buttonPress("b")) {
                 drivingSystem.driveToWhite(0.5);
-                drivingSystem.driveForward(0.5,-0.5);
-                drivingSystem.turn(180,0);
+                drivingSystem.driveForward(0.5, -0.5);
+                drivingSystem.turn(180, 0);
                 shootingSystem.shoot();
             }
 
-            if(OurGamepad1.buttonPress("y")){
-                
+            if (OurGamepad1.buttonPress("y")) {
+                drivingSystem.driveForward(280, 0.5);
+                drivingSystem.turn(90, 0.5);
+                drivingSystem.driveForward(40, 0.5);
+                drivingSystem.driveForward(40, -0.5);
+                drivingSystem.driveForward(-90, 0);
+                drivingSystem.driveForward(140, -0.5);
+                shootingSystem.toggle();
+                drivingSystem.turn(180, 0);
+                shootingSystem.shoot();
+                shootingSystem.toggle();
+                drivingSystem.driveForward(10, 0.5);
             }
 
-            if(OurGamepad1.buttonPress("x")){
-                drivingSystem.driveForward(100,0.5);
-                drivingSystem.turn(120,0.5);
-                drivingSystem.driveForward(100,0.5);
-                drivingSystem.turn(120,0.5);
-                drivingSystem.driveForward(100,0.5);
+            if (OurGamepad1.buttonPress("x")) {
+                drivingSystem.driveForward(100, 0.5);
+                drivingSystem.turn(120, 0.5);
+                drivingSystem.driveForward(100, 0.5);
+                drivingSystem.turn(120, 0.5);
+                drivingSystem.driveForward(100, 0.5);
             }
 
             OurGamepad1.update();

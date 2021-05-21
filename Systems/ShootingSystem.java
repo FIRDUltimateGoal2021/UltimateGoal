@@ -9,7 +9,6 @@ public class ShootingSystem {
     public final Servo angleServo;
     public final Servo angleServo2;
     public final DcMotor motor;
-//    public double a0 = 90;
     public double currentAngle = 0;
     public boolean isOn = false;
     public boolean loaded = false;
