@@ -6,18 +6,18 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class ShootingSystem {
     public final LinearOpMode opMode;
-    public final Servo angleServo;
-    public final Servo angleServo2;
-    public final DcMotor motor;
-//    public double a0 = 90;
-    public double currentAngle = 0;
-    public boolean isOn = false;
-    public boolean loaded = false;
+    public final Servo        angleServo;
+    public final Servo        angleServo2;
+    public final DcMotor      motor;
+    //    public double a0 = 90;
+    public       double       currentAngle = 0;
+    public       boolean      isOn         = false;
+    public       boolean      loaded       = false;
 
     public ShootingSystem(LinearOpMode opMode) {
         this.opMode = opMode;
-        motor = opMode.hardwareMap.get(DcMotor.class, "ShootingMotor");
-        angleServo = opMode.hardwareMap.get(Servo.class, "AngleServoRight");
+        motor       = opMode.hardwareMap.get(DcMotor.class, "ShootingMotor");
+        angleServo  = opMode.hardwareMap.get(Servo.class, "AngleServoRight");
         angleServo2 = opMode.hardwareMap.get(Servo.class, "AngleServoLeft");
     }
 

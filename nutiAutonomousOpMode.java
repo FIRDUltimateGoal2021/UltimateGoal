@@ -45,54 +45,53 @@ import java.net.HttpURLConnection;
  * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
  * of the FTC Driver Station. When an selection is made from the menu, the corresponding OpMode
  * class is instantiated on the Robot Controller and executed.
- *
+ * <p>
  * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
  * It includes all the skeletal structure that all linear OpModes contain.
- *
+ * <p>
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="nutiAutonomousOpMode", group="Linear Opmode")
+@TeleOp(name = "nutiAutonomousOpMode", group = "Linear Opmode")
 
 public class nutiAutonomousOpMode extends LinearOpMode {
 
-    DrivingSystem drivingSystem;
-    OurGamepad OurGamepad1;
+    DrivingSystem  drivingSystem;
+    OurGamepad     OurGamepad1;
     ShootingSystem shootingSystem;
 
     @Override
     public void runOpMode() {
         waitForStart();
 
-        drivingSystem = new DrivingSystem(this);
+        drivingSystem  = new DrivingSystem(this);
         shootingSystem = new ShootingSystem(this);
-        OurGamepad1 = new OurGamepad(gamepad1);
+        OurGamepad1    = new OurGamepad(gamepad1);
 
-        while(opModeIsActive()){
-            if(OurGamepad1.buttonPress("a")){
+        while (opModeIsActive()) {
+            if (OurGamepad1.buttonPress("a")) {
                 drivingSystem.turn(90);
             }
 
-            if(OurGamepad1.buttonPress("b")){
+            if (OurGamepad1.buttonPress("b")) {
                 drivingSystem.driveToWhite(0.5);
-                drivingSystem.driveForward(0.5,-0.5);
+                drivingSystem.driveForward(0.5, -0.5);
                 drivingSystem.turn(180);
                 shootingSystem.shoot();
             }
 
-            if(OurGamepad1.buttonPress("y")){
+            if (OurGamepad1.buttonPress("y")) {
                 drivingSystem.driveToWhite(0.5);
             }
 
-            if(OurGamepad1.buttonPress("x")){
-                drivingSystem.driveForward(3,0.5);
+            if (OurGamepad1.buttonPress("x")) {
+                drivingSystem.driveForward(3, 0.5);
                 drivingSystem.turn(120);
-                drivingSystem.driveForward(4,0.5);
+                drivingSystem.driveForward(4, 0.5);
                 drivingSystem.turn(120);
-                drivingSystem.driveForward(4,0.5);
+                drivingSystem.driveForward(4, 0.5);
             }
-
 
 
             OurGamepad1.update();

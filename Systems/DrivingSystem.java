@@ -48,7 +48,7 @@ public class DrivingSystem {
         imu.initialize(parameters);
 
         colorSensor = new ColorSensor(opMode);
-        globalAng = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+        globalAng   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
     }
 
     public void movetheta(double theta) {
@@ -120,32 +120,30 @@ public class DrivingSystem {
 
         double currentTurningAngle = angle;
 
-        if (currentTurningAngle > 90 && destination < -90){
-            while(currentTurningAngle > 0){
+        if (currentTurningAngle > 90 && destination < -90) {
+            while (currentTurningAngle > 0) {
                 driveByJoystick(0, -0.5);
                 currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
             }
-            while(currentTurningAngle < destination){
+            while (currentTurningAngle < destination) {
                 driveByJoystick(0, -0.5);
                 currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
             }
-        }
-        else if (currentTurningAngle < -90 && destination > 90){
-            while(currentTurningAngle < 0){
+        } else if (currentTurningAngle < -90 && destination > 90) {
+            while (currentTurningAngle < 0) {
                 driveByJoystick(0, 0.5);
                 currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
             }
-            while(currentTurningAngle > destination){
-                driveByJoystick(0, 0.5);
-                currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
-            }
-        }
-        else if (currentTurningAngle > destination) {
             while (currentTurningAngle > destination) {
                 driveByJoystick(0, 0.5);
                 currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
             }
-        } else{
+        } else if (currentTurningAngle > destination) {
+            while (currentTurningAngle > destination) {
+                driveByJoystick(0, 0.5);
+                currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+            }
+        } else {
             while (currentTurningAngle < destination) {
                 driveByJoystick(0, -0.5);
                 currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
@@ -159,15 +157,31 @@ public class DrivingSystem {
         ElapsedTime timer = new ElapsedTime();
         timer.startTime();
         while (timer.seconds() < time) {
-            double correction = angleCorrection()/20;
+            double correction = angleCorrection() / 20;
             driveByJoystick(-speed, correction);
         }
         stöp();
     }
 
-    public void driveToWhite(double speed){
-        while(colorSensor.getColor() != ColorSensor.ColorEnum.WHITE){
-            double correction = angleCorrection()/20;
+    public void driveToWhite(double speed) {
+        while (colorSensor.getColor() != ColorSensor.ColorEnum.WHITE) {
+            double correction = angleCorrection() / 20;
+            driveByJoystick(-speed, correction);
+        }
+        betterStöp();
+    }
+
+    public void driveToBlue(double speed) {
+        while (colorSensor.getColor() != ColorSensor.ColorEnum.BLUE) {
+            double correction = angleCorrection() / 20;
+            driveByJoystick(-speed, correction);
+        }
+        stöp();
+    }
+
+    public void driveToRed(double speed) {
+        while (colorSensor.getColor() != ColorSensor.ColorEnum.RED) {
+            double correction = angleCorrection() / 20;
             driveByJoystick(-speed, correction);
         }
         stöp();
