@@ -61,20 +61,20 @@ import org.firstinspires.ftc.teamcode.UltimateGoal.Utils.OurGamepad;
 //@Disabled
 public class FirstOpMode extends LinearOpMode {
 
-    DrivingSystem drivingSystem;
-    ShootingSystem shootingSystem;
+    DrivingSystem    drivingSystem;
+    ShootingSystem   shootingSystem;
     CollectionSystem collectionSystem;
-    OurGamepad ourGamepad1;
-    
+    OurGamepad       ourGamepad1;
+
     ElapsedTime timer = new ElapsedTime(100);
 
     @Override
     public void runOpMode() {
-        drivingSystem = new DrivingSystem(this);
-        shootingSystem = new ShootingSystem(this);
+        drivingSystem    = new DrivingSystem(this);
+        shootingSystem   = new ShootingSystem(this);
         collectionSystem = new CollectionSystem(this);
-        ourGamepad1 = new OurGamepad(gamepad1);
-        
+        ourGamepad1      = new OurGamepad(gamepad1);
+
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 

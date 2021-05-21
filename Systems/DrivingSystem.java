@@ -58,7 +58,7 @@ public class DrivingSystem {
         imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
 
         colorSensor = new ColorSensor(opMode);
-        globalAng = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+        globalAng   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
     }
 
     public void driveByJoystick(double horizontal, double vertical) {

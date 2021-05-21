@@ -15,8 +15,8 @@ public class ShootingSystem {
 
     public ShootingSystem(LinearOpMode opMode) {
         this.opMode = opMode;
-        motor = opMode.hardwareMap.get(DcMotor.class, "ShootingMotor");
-        angleServo = opMode.hardwareMap.get(Servo.class, "AngleServoRight");
+        motor       = opMode.hardwareMap.get(DcMotor.class, "ShootingMotor");
+        angleServo  = opMode.hardwareMap.get(Servo.class, "AngleServoRight");
         angleServo2 = opMode.hardwareMap.get(Servo.class, "AngleServoLeft");
     }
 

@@ -57,17 +57,17 @@ import java.net.HttpURLConnection;
 
 public class nutiAutonomousOpMode extends LinearOpMode {
 
-    DrivingSystem drivingSystem;
-    OurGamepad OurGamepad1;
+    DrivingSystem  drivingSystem;
+    OurGamepad     OurGamepad1;
     ShootingSystem shootingSystem;
 
     @Override
     public void runOpMode() {
         waitForStart();
 
-        drivingSystem = new DrivingSystem(this);
+        drivingSystem  = new DrivingSystem(this);
         shootingSystem = new ShootingSystem(this);
-        OurGamepad1 = new OurGamepad(gamepad1);
+        OurGamepad1    = new OurGamepad(gamepad1);
 
         while (opModeIsActive()) {
             if (OurGamepad1.buttonPress("a")) {

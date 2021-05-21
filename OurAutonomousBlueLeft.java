@@ -15,8 +15,8 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
-@Autonomous(name="OurAutonomous", group="Linear Opmode")
-public class OurAutonomous extends LinearOpMode {
+@Autonomous(name = "OurAutonomous", group = "Linear Opmode")
+public class OurAutonomousBlueLeft extends LinearOpMode {
 
     // TODO:
     // Detect number of rings
@@ -31,7 +31,7 @@ public class OurAutonomous extends LinearOpMode {
     ColorSensor      colorSensor;
 
     OpenCvInternalCamera phoneCam;
-    OurPipeline pipeline;
+    OurPipeline          pipeline;
 
     ElapsedTime timer = new ElapsedTime(100);
 
@@ -49,12 +49,10 @@ public class OurAutonomous extends LinearOpMode {
         phoneCam.setPipeline(pipeline);
         phoneCam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
 
-        phoneCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
-        {
+        phoneCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
-            public void onOpened()
-            {
-                phoneCam.startStreaming(320,240, OpenCvCameraRotation.SIDEWAYS_LEFT);
+            public void onOpened() {
+                phoneCam.startStreaming(320, 240, OpenCvCameraRotation.SIDEWAYS_LEFT);
             }
         });
 
@@ -70,13 +68,42 @@ public class OurAutonomous extends LinearOpMode {
         while (opModeIsActive()) {
             telemetry.addData("Analysis", pipeline.getAnalysis());
             telemetry.addData("Position", pipeline.position);
+
+            switch (pipeline.position) {
+                case NONE:
+                    A();
+                    return;
+                case ONE:
+                    B();
+                    return;
+                case FOUR:
+                    C();
+            }
         }
-//        while (true) {
-//            drivingSystem.driveByJoystick(-1, 0);
-//            if (colorSensor.getColor() == ColorSensor.ColorEnum.WHITE) {
-//                drivingSystem.betterStöp();
-//                break;
-//            }
-//        }
+    }
+
+    public void A() {
+        drivingSystem.turn(-45);
+        drivingSystem.driveForward(1, -0.5);
+        drivingSystem.turn(45);
+        drivingSystem.driveToWhite(-1);
+    }
+
+    public void B() {
+        drivingSystem.driveToWhite(-1);
+        drivingSystem.turn(45);
+        drivingSystem.driveForward(1, -0.5);
+        drivingSystem.turn(-45);
+        drivingSystem.driveToWhite(0.5);
+    }
+
+    public void C() {
+        drivingSystem.turn(-45);
+        drivingSystem.driveForward(1, -0.5);
+        drivingSystem.turn(45);
+        drivingSystem.driveToBlue(-1);
+        drivingSystem.driveToBlue(-1);
+        drivingSystem.driveToBlue(-1);
+        drivingSystem.driveToWhite(1);
     }
 }
