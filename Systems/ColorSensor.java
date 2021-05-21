@@ -35,16 +35,24 @@ public class ColorSensor {
 
         if (hsvValues[1] > 0.5 && hsvValues[2] > 0.5) {
             if (hsvValues[0] < 260 && hsvValues[0] > 200) {
+                opMode.telemetry.addLine("color: blue");
+                opMode.telemetry.update();
                 return ColorEnum.BLUE;
             }
             if ((hsvValues[0] > 0 || hsvValues[0] > 340)) {
+                opMode.telemetry.addLine("color: red");
+                opMode.telemetry.update();
                 return ColorEnum.RED;
             }
         }
 
         if (hsvValues[1] < 0.2 && hsvValues[2] > 0.1) {
+            opMode.telemetry.addLine("color: white");
+            opMode.telemetry.update();
             return ColorEnum.WHITE;
         }
+        opMode.telemetry.addLine("color: dorian");
+        opMode.telemetry.update();
         return ColorEnum.DORIAN;
     }
 }
