@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Routs {
 
+    LinearOpMode opMode;
     DrivingSystem drivingSystem;
     ShootingSystem shootingSystem;
     ElapsedTime timer;
@@ -20,6 +21,7 @@ public class Routs {
         else if (color.equals("red"))
             this.color = -1;
 
+        this.opMode = opMode;
         drivingSystem = new DrivingSystem(opMode);
         shootingSystem = new ShootingSystem(opMode);
         timer = new ElapsedTime();
@@ -38,6 +40,7 @@ public class Routs {
         shootingSystem.toggle();
         drivingSystem.driveForward(10, 0.5);
         shootingSystem.shootLoad();
+        opMode.requestOpModeStop();
     }
 
     public void rightB() {
@@ -51,6 +54,7 @@ public class Routs {
         drivingSystem.driveForward(30, -0.5);
         shootingSystem.shootLoad();
         shootingSystem.toggle();
+        opMode.requestOpModeStop();
     }
 
     public void rightA() {
@@ -68,6 +72,7 @@ public class Routs {
         shootingSystem.load();
         drivingSystem.driveForward(30, -0.5);
         sleep(2000);
+        opMode.requestOpModeStop();
     }
 
 

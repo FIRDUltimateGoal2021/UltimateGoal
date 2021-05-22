@@ -15,30 +15,38 @@ public class OurPipeline extends OpenCvPipeline {
         NONE
     }
 
+
+
     static final Scalar BLUE  = new Scalar(0, 0, 255);
     static final Scalar GREEN = new Scalar(0, 255, 0);
 
-    static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(181, 98);
+    public Point REGION1_TOPLEFT_ANCHOR_POINT;
 
-    static final int REGION_WIDTH  = 35;
-    static final int REGION_HEIGHT = 25;
+    static final int REGION_WIDTH  = 45;
+    static final int REGION_HEIGHT = 30;
 
-    final int FOUR_RING_THRESHOLD = 150;
-    final int ONE_RING_THRESHOLD  = 135;
+    final int FOUR_RING_THRESHOLD = 155;
+    final int ONE_RING_THRESHOLD  = 140;
 
-    Point region1_pointA = new Point(
-            REGION1_TOPLEFT_ANCHOR_POINT.x,
-            REGION1_TOPLEFT_ANCHOR_POINT.y);
-    Point region1_pointB = new Point(
-            REGION1_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
-            REGION1_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
+    Point region1_pointA;
+    Point region1_pointB;
 
     Mat region1_Cb;
     Mat YCrCb = new Mat();
     Mat Cb    = new Mat();
     int avg1;
 
-    public volatile RingPosition position = RingPosition.FOUR;
+    public volatile RingPosition position = RingPosition.NONE;
+
+    public OurPipeline(int x, int y) {
+        REGION1_TOPLEFT_ANCHOR_POINT = new Point(x, y);
+        region1_pointA = new Point(
+                REGION1_TOPLEFT_ANCHOR_POINT.x,
+                REGION1_TOPLEFT_ANCHOR_POINT.y);
+        region1_pointB = new Point(
+                REGION1_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
+                REGION1_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
+    }
 
     void inputToCb(Mat input) {
         Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2YCrCb);
@@ -65,7 +73,7 @@ public class OurPipeline extends OpenCvPipeline {
                 BLUE, // The color the rectangle is drawn in
                 2); // Thickness of the rectangle lines
 
-        position = RingPosition.FOUR; // Record our analysis
+        position = RingPosition.NONE; // Record our analysis
         if (avg1 > FOUR_RING_THRESHOLD) {
             position = RingPosition.FOUR;
         } else if (avg1 > ONE_RING_THRESHOLD) {

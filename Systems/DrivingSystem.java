@@ -156,8 +156,8 @@ public class DrivingSystem {
         resetEncoder();
 
         while (getDistance() <= distance * 10) {
-            //double correction = angleCorrection() / 20;
-            double correction = 0;
+            double correction = angleCorrection() / 20;
+//            double correction = 0;
             driveByJoystick(-speed, correction);
         }
         stöp();
