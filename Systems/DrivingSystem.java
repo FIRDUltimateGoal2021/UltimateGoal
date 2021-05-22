@@ -99,46 +99,65 @@ public class DrivingSystem {
         else if (destination < -180)
             destination += 360;
 
-        double currentTurningAngle = angle;
+        if(destination > 178 || destination < -178 ){
+            turn180(forwardSpeed);
+        }
+        else {
 
-        if (currentTurningAngle > 90 && destination < -90) {
-            while (currentTurningAngle > 0) {
-                driveByJoystick(-forwardSpeed, -0.5);
-                currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
-            }
-            while (currentTurningAngle < destination) {
-                driveByJoystick(-forwardSpeed, -0.5);
-                currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
-            }
-        } else if (currentTurningAngle < -90 && destination > 90) {
-            while (currentTurningAngle < 0) {
-                driveByJoystick(-forwardSpeed, 0.5);
-                currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
-            }
-            while (currentTurningAngle > destination) {
-                driveByJoystick(-forwardSpeed, 0.5);
-                currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
-            }
-        } else if (currentTurningAngle > destination) {
-            while (currentTurningAngle > destination) {
-                driveByJoystick(-forwardSpeed, 0.5);
-                currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
-            }
-        } else {
-            while (currentTurningAngle < destination) {
-                driveByJoystick(-forwardSpeed, -0.5);
-                currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+            double currentTurningAngle = angle;
+
+            if (currentTurningAngle > 90 && destination < -90) {
+                while (currentTurningAngle > 0) {
+                    driveByJoystick(-forwardSpeed, -0.5);
+                    currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+                }
+                while (currentTurningAngle < destination) {
+                    driveByJoystick(-forwardSpeed, -0.5);
+                    currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+                }
+            } else if (currentTurningAngle < -90 && destination > 90) {
+                while (currentTurningAngle < 0) {
+                    driveByJoystick(-forwardSpeed, 0.5);
+                    currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+                }
+                while (currentTurningAngle > destination) {
+                    driveByJoystick(-forwardSpeed, 0.5);
+                    currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+                }
+            } else if (currentTurningAngle > destination) {
+                while (currentTurningAngle > destination) {
+                    driveByJoystick(-forwardSpeed, 0.5);
+                    currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+                }
+            } else {
+                while (currentTurningAngle < destination) {
+                    driveByJoystick(-forwardSpeed, -0.5);
+                    currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+                }
             }
         }
         globalAng = destination;
         stöp();
     }
 
+    void turn180(double forwardSpeed){
+        double currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+        opMode.telemetry.addData("currentTurningAngle", currentTurningAngle);
+        opMode.telemetry.update();
+        while(currentTurningAngle < 176 && currentTurningAngle > -100){
+            driveByJoystick(-forwardSpeed,-0.5);
+            currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+            opMode.telemetry.addData("currentTurningAngle", currentTurningAngle);
+            opMode.telemetry.update();
+        }
+    }
+
     public void driveForward(double distance, double speed) {
         resetEncoder();
 
         while (getDistance() <= distance * 10) {
-            double correction = angleCorrection() / 20;
+            //double correction = angleCorrection() / 20;
+            double correction = 0;
             driveByJoystick(-speed, correction);
         }
         stöp();
