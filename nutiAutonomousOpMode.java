@@ -36,6 +36,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.DrivingSystem;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.ShootingSystem;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Utils.OurGamepad;
+import org.firstinspires.ftc.teamcode.UltimateGoal.Utils.Routs;
 
 import java.net.HttpURLConnection;
 
@@ -57,52 +58,35 @@ import java.net.HttpURLConnection;
 
 public class nutiAutonomousOpMode extends LinearOpMode {
 
-    DrivingSystem  drivingSystem;
-    OurGamepad     OurGamepad1;
+    DrivingSystem drivingSystem;
+    OurGamepad OurGamepad1;
     ShootingSystem shootingSystem;
+    Routs routs;
 
     @Override
     public void runOpMode() {
         waitForStart();
 
-        drivingSystem  = new DrivingSystem(this);
+        drivingSystem = new DrivingSystem(this);
         shootingSystem = new ShootingSystem(this);
-        OurGamepad1    = new OurGamepad(gamepad1);
+        OurGamepad1 = new OurGamepad(gamepad1);
+        routs = new Routs("blue", this);
 
         while (opModeIsActive()) {
             if (OurGamepad1.buttonPress("a")) {
-                drivingSystem.driveForward(300, 0.5);
+                routs.rightA();
             }
 
             if (OurGamepad1.buttonPress("b")) {
-                drivingSystem.driveToWhite(0.5);
-                drivingSystem.driveForward(0.5, -0.5);
-                drivingSystem.turn(180, 0);
-                shootingSystem.shoot();
+                routs.rightB();
             }
 
             if (OurGamepad1.buttonPress("y")) {
-                drivingSystem.driveForward(280, 0.5);
-                drivingSystem.turn(90, 0.5);
-                drivingSystem.driveForward(40, 0.5);
-                drivingSystem.driveForward(40, -0.5);
-                drivingSystem.turn(-90, 0);
-                drivingSystem.driveForward(140, -0.5);
-                shootingSystem.toggle();
-                drivingSystem.turn(180, 0);
-                shootingSystem.shootLoad();
-                shootingSystem.toggle();
-                drivingSystem.driveForward(10, 0.5);
-                shootingSystem.shootLoad();
-
+                drivingSystem.turn(90,0);
             }
 
             if (OurGamepad1.buttonPress("x")) {
-                drivingSystem.driveForward(100, 0.5);
-                drivingSystem.turn(120, 0.5);
-                drivingSystem.driveForward(100, 0.5);
-                drivingSystem.turn(120, 0.5);
-                drivingSystem.driveForward(100, 0.5);
+                drivingSystem.turn(180, 0);
             }
 
             OurGamepad1.update();
