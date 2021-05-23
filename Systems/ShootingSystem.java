@@ -20,7 +20,6 @@ public class ShootingSystem {
         angleServo  = opMode.hardwareMap.get(Servo.class, "AngleServoRight");
         angleServo2 = opMode.hardwareMap.get(Servo.class, "AngleServoLeft");
         motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motor.setVelocity(14400);
     }
 
     public void shoot() {
@@ -62,6 +61,7 @@ public class ShootingSystem {
     }
 
     public void on() {
+        motor.setVelocity(14400);
         motor.setPower(-1);
         isOn = true;
     }

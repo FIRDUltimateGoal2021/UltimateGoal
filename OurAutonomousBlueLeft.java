@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.CollectionSystem;
-import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.ColorSensor;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.DrivingSystem;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.ShootingSystem;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Utils.OurPipeline;
@@ -28,7 +27,6 @@ public class OurAutonomousBlueLeft extends LinearOpMode {
     DrivingSystem    drivingSystem;
     ShootingSystem   shootingSystem;
     CollectionSystem collectionSystem;
-    ColorSensor      colorSensor;
 
     OpenCvInternalCamera phoneCam;
     OurPipeline          pipeline;
@@ -40,7 +38,6 @@ public class OurAutonomousBlueLeft extends LinearOpMode {
         drivingSystem    = new DrivingSystem(this);
         shootingSystem   = new ShootingSystem(this);
         collectionSystem = new CollectionSystem(this);
-        colorSensor      = new ColorSensor(this);
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
@@ -90,7 +87,7 @@ public class OurAutonomousBlueLeft extends LinearOpMode {
     public void A() {
         telemetry.addLine("Area A");
 //        drivingSystem.driveToWhite(-1);
-//        requestOpModeStop();
+        requestOpModeStop();
     }
 
     public void B() {
@@ -100,7 +97,7 @@ public class OurAutonomousBlueLeft extends LinearOpMode {
 //        drivingSystem.driveForward(40, -0.5);
 //        drivingSystem.turn(-45, 0);
 //        drivingSystem.driveToWhite(0.5);
-//        requestOpModeStop();
+        requestOpModeStop();
     }
 
     public void C() {
@@ -109,6 +106,6 @@ public class OurAutonomousBlueLeft extends LinearOpMode {
 //        drivingSystem.driveToBlue(-1);
 //        drivingSystem.driveToBlue(-1);
 //        drivingSystem.driveToWhite(1);
-//        requestOpModeStop();
+        requestOpModeStop();
     }
 }

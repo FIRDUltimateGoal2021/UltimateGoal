@@ -44,7 +44,7 @@ public class Routs {
     }
 
     public void rightB() {
-        drivingSystem.driveForward(210, 0.5);
+        drivingSystem.driveForward(220, 0.5);
         drivingSystem.turn(90, 0.5);
         drivingSystem.turn(-90, -0.5);
 //        shootingSystem.toggle();
@@ -61,7 +61,7 @@ public class Routs {
         drivingSystem.turn(90, 0.5);
         drivingSystem.driveForward(75, 0.5);
         drivingSystem.driveForward(75,-0.5);
-        drivingSystem.turn(90, 0);
+//        drivingSystem.turn(90, 0);
 //        shootingSystem.toggle();
 //        shootingSystem.load();
 //        drivingSystem.driveForward(50, 0.5);
@@ -73,6 +73,12 @@ public class Routs {
 //        sleep(2000);
         opMode.requestOpModeStop();
     }
+
+    void leftC(){
+
+    }
+
+
 
 
     void sleep(int time){

@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.CollectionSystem;
-import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.ColorSensor;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.DrivingSystem;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.ShootingSystem;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Utils.OurPipeline;
@@ -29,10 +28,11 @@ public class OurAutonomousBlueRight extends LinearOpMode {
     DrivingSystem    drivingSystem;
     ShootingSystem   shootingSystem;
     CollectionSystem collectionSystem;
-    ColorSensor      colorSensor;
 
     OpenCvInternalCamera phoneCam;
     OurPipeline          pipeline;
+
+    Routs routs;
 
     ElapsedTime timer = new ElapsedTime(100);
 
@@ -41,11 +41,10 @@ public class OurAutonomousBlueRight extends LinearOpMode {
         drivingSystem    = new DrivingSystem(this);
         shootingSystem   = new ShootingSystem(this);
         collectionSystem = new CollectionSystem(this);
-        colorSensor      = new ColorSensor(this);
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
-        pipeline = new OurPipeline(200, 150);
+        pipeline = new OurPipeline(50, 150);
         phoneCam.setPipeline(pipeline);
         phoneCam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
 
@@ -59,7 +58,7 @@ public class OurAutonomousBlueRight extends LinearOpMode {
         waitForStart();
 
         timer.reset();
-        Routs routs = new Routs("blue", this);
+        routs = new Routs("blue", this);
 
         // Detect number of rings
 
@@ -72,16 +71,13 @@ public class OurAutonomousBlueRight extends LinearOpMode {
             if (timer.seconds() >= 2) {
                 switch (pipeline.position) {
                     case NONE:
-                        telemetry.addLine("Area A");
-                        routs.rightA();
+                        A();
                         return;
                     case ONE:
-                        telemetry.addLine("Area B");
-                        routs.rightB();
+                        B();
                         return;
                     case FOUR:
-                        telemetry.addLine("Area C   ");
-                        routs.rightC();
+                        C();
                 }
             }
 
@@ -91,30 +87,19 @@ public class OurAutonomousBlueRight extends LinearOpMode {
 
     public void A() {
         telemetry.addLine("Area A");
-        drivingSystem.driveToWhite(1);
-        drivingSystem.turn(-90, 0.5);
-        drivingSystem.driveToBlue(1);
+        routs.rightA();
         requestOpModeStop();
     }
 
     public void B() {
         telemetry.addLine("Area A");
-        drivingSystem.driveToWhite(-1);
-        drivingSystem.turn(-45, 0.5);
-        drivingSystem.driveForward(1, -0.5);
-        drivingSystem.driveToWhite(0.5);
+        routs.rightB();
         requestOpModeStop();
     }
 
     public void C() {
         telemetry.addLine("Area A");
-        drivingSystem.driveToBlue(-1);
-        drivingSystem.driveToBlue(-1);
-        drivingSystem.turn(-80, 0.5);
-        drivingSystem.driveForward(1, -0.5);
-        drivingSystem.driveForward(1, 0.5);
-        drivingSystem.turn(80, 0.5);
-        drivingSystem.driveToWhite(1);
+        routs.rightC();
         requestOpModeStop();
     }
 }
