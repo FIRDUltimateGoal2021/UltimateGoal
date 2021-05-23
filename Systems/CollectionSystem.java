@@ -23,10 +23,10 @@ public class CollectionSystem {
 
     public void spit() {
         if (isOn) {
-            off();
-        } else {
             motor.setPower(1);
-            isOn = true;
+            isOn = false;
+        } else {
+            off();
         }
     }
 

@@ -2,22 +2,25 @@ package org.firstinspires.ftc.teamcode.UltimateGoal.Systems;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class ShootingSystem {
     public final LinearOpMode opMode;
     public final Servo angleServo;
     public final Servo angleServo2;
-    public final DcMotor motor;
+    public final DcMotorEx motor;
     public double currentAngle = 0;
     public boolean isOn = false;
     public boolean loaded = false;
 
     public ShootingSystem(LinearOpMode opMode) {
         this.opMode = opMode;
-        motor       = opMode.hardwareMap.get(DcMotor.class, "ShootingMotor");
+        motor       = opMode.hardwareMap.get(DcMotorEx.class, "ShootingMotor");
         angleServo  = opMode.hardwareMap.get(Servo.class, "AngleServoRight");
         angleServo2 = opMode.hardwareMap.get(Servo.class, "AngleServoLeft");
+        motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motor.setVelocity(14400);
     }
 
     public void shoot() {
@@ -62,4 +65,18 @@ public class ShootingSystem {
         motor.setPower(-1);
         isOn = true;
     }
+
+    public void smallSpeed(){
+        motor.setVelocity(28800);
+    }
+
+    public void mediumSpeed(){
+        motor.setVelocity(36000);
+    }
+
+    public void highSpeed(){
+        motor.setVelocity(43200);
+    }
+
+
 }

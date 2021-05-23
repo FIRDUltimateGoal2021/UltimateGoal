@@ -82,11 +82,10 @@ public class nutiAutonomousOpMode extends LinearOpMode {
             }
 
             if (OurGamepad1.buttonPress("y")) {
-                drivingSystem.turn(90,0);
+                routs.rightC();
             }
 
             if (OurGamepad1.buttonPress("x")) {
-                drivingSystem.turn(180, 0);
             }
 
             OurGamepad1.update();

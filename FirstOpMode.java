@@ -115,6 +115,16 @@ public class FirstOpMode extends LinearOpMode {
                 shootingSystem.shootLoad();
             }
 
+            if(ourGamepad1.buttonPress("x")){
+                shootingSystem.smallSpeed();
+            }
+            if(ourGamepad1.buttonPress("a")){
+                shootingSystem.mediumSpeed();
+            }
+            if(ourGamepad1.buttonPress("b")){
+                shootingSystem.highSpeed();
+            }
+
             ourGamepad1.update();
             telemetry.update();
         }
