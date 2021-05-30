@@ -16,7 +16,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
 //@Autonomous(name = "OurAutonomousBR", group = "Linear Opmode")
-@TeleOp(name = "OurAutonomousBR", group = "Linear Opmode")
+@Autonomous(name = "OurAutonomousBR", group = "Linear Opmode")
 public class OurAutonomousBlueRight extends LinearOpMode {
 
     // TODO:
@@ -44,7 +44,7 @@ public class OurAutonomousBlueRight extends LinearOpMode {
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
-        pipeline = new OurPipeline(50, 150);
+        pipeline = new OurPipeline(45, 150);
         phoneCam.setPipeline(pipeline);
         phoneCam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
 

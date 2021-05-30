@@ -10,14 +10,14 @@ import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.DrivingSystem;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.ShootingSystem;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Utils.OurPipeline;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Utils.Routs;
-import org.opencv.core.Point;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
-@Autonomous(name = "OurAutonomousBL", group = "Linear Opmode")
-public class OurAutonomousBlueLeft extends LinearOpMode {
+//@Autonomous(name = "OurAutonomousBR", group = "Linear Opmode")
+@Autonomous(name = "OurAutonomousRR", group = "Linear Opmode")
+public class OurAutonomousRedRight extends LinearOpMode {
 
     // TODO:
     // Detect number of rings
@@ -32,20 +32,19 @@ public class OurAutonomousBlueLeft extends LinearOpMode {
     OpenCvInternalCamera phoneCam;
     OurPipeline          pipeline;
 
-    ElapsedTime timer = new ElapsedTime(100);
-
     Routs routs;
+
+    ElapsedTime timer = new ElapsedTime(100);
 
     @Override
     public void runOpMode() {
         drivingSystem    = new DrivingSystem(this);
         shootingSystem   = new ShootingSystem(this);
         collectionSystem = new CollectionSystem(this);
-        routs = new Routs("blue", this);
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
-        pipeline = new OurPipeline(243, 143);
+        pipeline = new OurPipeline(45, 150);
         phoneCam.setPipeline(pipeline);
         phoneCam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
 
@@ -59,6 +58,11 @@ public class OurAutonomousBlueLeft extends LinearOpMode {
         waitForStart();
 
         timer.reset();
+        routs = new Routs("red", this);
+
+        // Detect number of rings
+
+        // Drag Wobble
 
         while (opModeIsActive()) {
             telemetry.addData("Analysis", pipeline.getAnalysis());

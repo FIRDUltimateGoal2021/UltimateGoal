@@ -61,21 +61,20 @@ public class ShootingSystem {
     }
 
     public void on() {
-        motor.setVelocity(14400);
-        motor.setPower(-1);
+        motor.setVelocity(-79200);
         isOn = true;
     }
 
     public void smallSpeed(){
-        motor.setVelocity(28800);
+        motor.setVelocity(-64800);
     }
 
     public void mediumSpeed(){
-        motor.setVelocity(36000);
+        motor.setVelocity(-72000);
     }
 
     public void highSpeed(){
-        motor.setVelocity(43200);
+        motor.setVelocity(-79200);
     }
 
 

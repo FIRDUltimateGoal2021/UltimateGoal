@@ -75,6 +75,8 @@ public class FirstOpMode extends LinearOpMode {
         collectionSystem = new CollectionSystem(this);
         ourGamepad1      = new OurGamepad(gamepad1);
 
+        shootingSystem.load();
+
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
@@ -113,16 +115,6 @@ public class FirstOpMode extends LinearOpMode {
             // Button a: Toggle between loading position and shoot (servo)
             if (ourGamepad1.buttonPress("y")) {
                 shootingSystem.shootLoad();
-            }
-
-            if(ourGamepad1.buttonPress("x")){
-                shootingSystem.smallSpeed();
-            }
-            if(ourGamepad1.buttonPress("a")){
-                shootingSystem.mediumSpeed();
-            }
-            if(ourGamepad1.buttonPress("b")){
-                shootingSystem.highSpeed();
             }
 
             ourGamepad1.update();

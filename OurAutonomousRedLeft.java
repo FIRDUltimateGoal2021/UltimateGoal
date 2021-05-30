@@ -16,8 +16,8 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
-@Autonomous(name = "OurAutonomousBL", group = "Linear Opmode")
-public class OurAutonomousBlueLeft extends LinearOpMode {
+@Autonomous(name = "OurAutonomousRL", group = "Linear Opmode")
+public class OurAutonomousRedLeft extends LinearOpMode {
 
     // TODO:
     // Detect number of rings
@@ -41,7 +41,7 @@ public class OurAutonomousBlueLeft extends LinearOpMode {
         drivingSystem    = new DrivingSystem(this);
         shootingSystem   = new ShootingSystem(this);
         collectionSystem = new CollectionSystem(this);
-        routs = new Routs("blue", this);
+        routs = new Routs("red", this);
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
@@ -67,13 +67,13 @@ public class OurAutonomousBlueLeft extends LinearOpMode {
             if (timer.seconds() >= 2) {
                 switch (pipeline.position) {
                     case NONE:
-                        routs.leftA();
+                        routs.rightA();
                         return;
                     case ONE:
-                        routs.leftB();
+                        routs.rightB();
                         return;
                     case FOUR:
-                        routs.leftC();
+                        routs.rightC();
                 }
             }
 

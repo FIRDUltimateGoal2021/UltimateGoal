@@ -61,14 +61,14 @@ public class DrivingSystem {
     }
 
     public void driveByJoystick(double horizontal, double vertical) {
-        double left = -vertical - horizontal;
-        double right = -vertical + horizontal;
+        double left = vertical + horizontal;
+        double right = vertical - horizontal;
         if (Math.abs(left) > 1 || Math.abs(right) > 1) {
             left = left / Math.max(Math.abs(left), Math.abs(right));
             right = right / Math.max(Math.abs(left), Math.abs(right));
         }
-        leftMotor.setPower(-left);
-        rightMotor.setPower(-right);
+        leftMotor.setPower(left);
+        rightMotor.setPower(right);
     }
 
     public void stöp() {
@@ -89,7 +89,7 @@ public class DrivingSystem {
     }
 
     public void turn(double changeAng, double forwardSpeed) {
-        final double turnSpeed = 0.2;
+        final double turnSpeed = 0.5;
         forwardSpeed = forwardSpeed/2;
 
         double angle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
@@ -155,7 +155,8 @@ public class DrivingSystem {
         speed = speed/2;
 
         while (getDistance() <= distance * 10) {
-            double correction = angleCorrection() / 60;
+            double correction = angleCorrection() / 40;
+
             driveByJoystick(-speed, correction);
         }
         stöp();
@@ -187,12 +188,13 @@ public class DrivingSystem {
 
     double angleCorrection() {
         double ang = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
-        opMode.telemetry.addData("ang",ang);
+        opMode.telemetry.addData("ang: ",ang);
+        opMode.telemetry.addData("globalAng: ",globalAng);
 
         if (ang > 90 && globalAng < -90)
-            return ((180 - ang) - (-180 - globalAng));
+            return ((-180 - globalAng) - (180 - ang));
         if (ang < -90 && globalAng > 90)
-            return ((-180 - ang) - (180 - globalAng));
+            return ((180 - globalAng) - (-180 - ang));
         return (ang - globalAng);
     }
 
