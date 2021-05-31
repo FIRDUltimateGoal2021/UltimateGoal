@@ -57,7 +57,7 @@ public class DrivingSystem {
 
         imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
 
-        globalAng   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+        globalAng = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
     }
 
     public void driveByJoystick(double horizontal, double vertical) {
@@ -88,9 +88,14 @@ public class DrivingSystem {
         }
     }
 
+    public void driveTurn(double turnSpeed) {
+        leftMotor.setPower(turnSpeed);
+        rightMotor.setPower(turnSpeed);
+    }
+
     public void turn(double changeAng, double forwardSpeed) {
-        final double turnSpeed = 0.5;
-        forwardSpeed = forwardSpeed/2;
+        final double turnSpeed = 0.3;
+        forwardSpeed = forwardSpeed / 2;
 
         double angle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
         double destination = angle + changeAng;
@@ -100,39 +105,44 @@ public class DrivingSystem {
         else if (destination < -180)
             destination += 360;
 
-        if(destination > 178 || destination < -178 ){
+        if (destination > 178 || destination < -178) {
             turn180(forwardSpeed, turnSpeed);
-        }
-        else {
+        } else {
 
             double currentTurningAngle = angle;
 
             if (currentTurningAngle > 90 && destination < -90) {
                 while (currentTurningAngle > 0) {
-                    driveByJoystick(-forwardSpeed, -turnSpeed);
+//                    driveByJoystick(-forwardSpeed, -turnSpeed);
+                    driveTurn(-turnSpeed);
                     currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
                 }
                 while (currentTurningAngle < destination) {
-                    driveByJoystick(-forwardSpeed, -turnSpeed);
+//                    driveByJoystick(-forwardSpeed, -turnSpeed);
+                    driveTurn(-turnSpeed);
                     currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
                 }
             } else if (currentTurningAngle < -90 && destination > 90) {
                 while (currentTurningAngle < 0) {
-                    driveByJoystick(-forwardSpeed, turnSpeed);
+//                    driveByJoystick(-forwardSpeed, turnSpeed);
+                    driveTurn(turnSpeed);
                     currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
                 }
                 while (currentTurningAngle > destination) {
-                    driveByJoystick(-forwardSpeed, turnSpeed);
+//                    driveByJoystick(-forwardSpeed, turnSpeed);
+                    driveTurn(turnSpeed);
                     currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
                 }
             } else if (currentTurningAngle > destination) {
                 while (currentTurningAngle > destination) {
-                    driveByJoystick(-forwardSpeed, turnSpeed);
+//                    driveByJoystick(-forwardSpeed, turnSpeed);
+                    driveTurn(turnSpeed);
                     currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
                 }
             } else {
                 while (currentTurningAngle < destination) {
-                    driveByJoystick(-forwardSpeed, -turnSpeed);
+//                    driveByJoystick(-forwardSpeed, -turnSpeed);
+                    driveTurn(-turnSpeed);
                     currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
                 }
             }
@@ -142,17 +152,17 @@ public class DrivingSystem {
         stöp();
     }
 
-    void turn180(double forwardSpeed, double turnSpeed){
+    void turn180(double forwardSpeed, double turnSpeed) {
         double currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
-        while(currentTurningAngle < 176 && currentTurningAngle > -100){
-            driveByJoystick(-forwardSpeed,-turnSpeed);
+        while (currentTurningAngle < 176 && currentTurningAngle > -100) {
+            driveByJoystick(-forwardSpeed, -turnSpeed);
             currentTurningAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
         }
     }
 
     public void driveForward(double distance, double speed) {
         resetEncoder();
-        speed = speed/2;
+        speed = speed / 2;
 
         while (getDistance() <= distance * 10) {
             double correction = angleCorrection() / 40;
@@ -188,8 +198,8 @@ public class DrivingSystem {
 
     double angleCorrection() {
         double ang = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
-        opMode.telemetry.addData("ang: ",ang);
-        opMode.telemetry.addData("globalAng: ",globalAng);
+        opMode.telemetry.addData("ang: ", ang);
+        opMode.telemetry.addData("globalAng: ", globalAng);
 
         if (ang > 90 && globalAng < -90)
             return ((-180 - globalAng) - (180 - ang));

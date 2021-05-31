@@ -59,7 +59,7 @@ import java.net.HttpURLConnection;
 public class nutiAutonomousOpMode extends LinearOpMode {
 
     DrivingSystem drivingSystem;
-    OurGamepad OurGamepad1;
+    OurGamepad ourGamepad1;
     ShootingSystem shootingSystem;
     Routs routs;
 
@@ -69,28 +69,35 @@ public class nutiAutonomousOpMode extends LinearOpMode {
 
         drivingSystem = new DrivingSystem(this);
         shootingSystem = new ShootingSystem(this);
-        OurGamepad1 = new OurGamepad(gamepad1);
+        ourGamepad1 = new OurGamepad(gamepad1);
         routs = new Routs("blue", this);
 
         while (opModeIsActive()) {
-            if (OurGamepad1.buttonPress("a")) {
+            if (ourGamepad1.buttonPress("a")) {
                 routs.rightA();
             }
 
-            if (OurGamepad1.buttonPress("b")) {
-                routs.leftB();
+            if (ourGamepad1.buttonPress("b")) {
+                routs.rightB();
             }
 
-            if (OurGamepad1.buttonPress("y")) {
+            if (ourGamepad1.buttonPress("y")) {
+                routs.rightC();
+            }
+
+            if (ourGamepad1.buttonPress("x")) {
+                routs.leftA();
+            }
+
+            if (ourGamepad1.buttonPress("Rb")) {
+                routs.leftB();
+            }
+            
+            if (ourGamepad1.buttonPress("Lb")) {
                 routs.leftC();
             }
 
-            if (OurGamepad1.buttonPress("x")) {
-                drivingSystem.turn(180,0);
-                drivingSystem.driveForward(50,0.5);
-            }
-
-            OurGamepad1.update();
+            ourGamepad1.update();
         }
     }
 
