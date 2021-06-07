@@ -90,10 +90,6 @@ public class FirstOpMode extends LinearOpMode {
 
             // Joysticks
             drivingSystem.driveByJoystick(-gamepad2.left_stick_y, gamepad2.right_stick_x);
-            shootingSystem.changeAngle(
-                    shootingSystem.currentAngle
-                            + 0.5 * gamepad1.right_stick_y
-            );
 
             telemetry.addData("Servo Angle: ", shootingSystem.currentAngle);
 
@@ -112,9 +108,14 @@ public class FirstOpMode extends LinearOpMode {
                 collectionSystem.spit();
             }
 
+
             // Button a: Toggle between loading position and shoot (servo)
             if (ourGamepad1.buttonPress("y")) {
                 shootingSystem.shootLoad();
+            }
+
+            if(ourGamepad1.buttonPress("x")){
+                shootingSystem.addSpeed();
             }
 
             ourGamepad1.update();

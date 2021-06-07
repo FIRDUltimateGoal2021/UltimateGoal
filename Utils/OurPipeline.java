@@ -26,7 +26,7 @@ public class OurPipeline extends OpenCvPipeline {
     static final int REGION_HEIGHT = 30;
 
     final int FOUR_RING_THRESHOLD = 143;
-    final int ONE_RING_THRESHOLD  = 129;
+    final int ONE_RING_THRESHOLD  = 130;
 
     Point region1_pointA;
     Point region1_pointB;

@@ -13,6 +13,7 @@ public class ShootingSystem {
     public double currentAngle = 0;
     public boolean isOn = false;
     public boolean loaded = false;
+    public int speed = -1440;
 
     public ShootingSystem(LinearOpMode opMode) {
         this.opMode = opMode;
@@ -23,12 +24,12 @@ public class ShootingSystem {
     }
 
     public void shoot() {
-        changeAngle(28);
+        changeAngle(25);
         loaded = false;
     }
 
     public void load() {
-        changeAngle(0);
+        changeAngle(5);
         loaded = true;
     }
 
@@ -61,8 +62,14 @@ public class ShootingSystem {
     }
 
     public void on() {
-        motor.setVelocity(-79200);
+        motor.setVelocity(-1850);
         isOn = true;
+        opMode.telemetry.addData("speed: ",speed);
+        opMode.telemetry.update();
+    }
+
+    public void addSpeed(){
+        speed -= 200;
     }
 
     public void smallSpeed(){

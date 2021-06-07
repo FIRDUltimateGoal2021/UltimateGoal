@@ -16,7 +16,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
 //@Autonomous(name = "OurAutonomousBR", group = "Linear Opmode")
-@Autonomous(name = "OurAutonomousRR", group = "Linear Opmode")
+@Autonomous(name = "OurAutonomousRedRight", group = "Linear Opmode")
 public class OurAutonomousRedRight extends LinearOpMode {
 
     // TODO:

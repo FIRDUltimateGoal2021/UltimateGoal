@@ -2,8 +2,10 @@ package org.firstinspires.ftc.teamcode.UltimateGoal.Utils;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.CollectionSystem;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.DrivingSystem;
 import org.firstinspires.ftc.teamcode.UltimateGoal.Systems.ShootingSystem;
+
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Routs {
@@ -11,6 +13,7 @@ public class Routs {
     LinearOpMode opMode;
     DrivingSystem drivingSystem;
     ShootingSystem shootingSystem;
+    CollectionSystem collectionSystem;
     ElapsedTime timer;
 
     int color = 0;
@@ -24,6 +27,7 @@ public class Routs {
         this.opMode = opMode;
         drivingSystem = new DrivingSystem(opMode);
         shootingSystem = new ShootingSystem(opMode);
+        collectionSystem = new CollectionSystem(opMode);
         timer = new ElapsedTime();
     }
 
@@ -31,33 +35,33 @@ public class Routs {
         drivingSystem.driveForward(300, 0.5);
         drivingSystem.turn(90 * color, 0.5);
         drivingSystem.driveForward(75, 0.5);
-        drivingSystem.driveForward(75, -0.5);
+        drivingSystem.driveForward(40, -0.5);
         drivingSystem.turn(-90 * color, 0);
-        drivingSystem.driveForward(125, -0.5);
+        drivingSystem.driveForward(155, -0.5);
         shootingSystem.on();
-        drivingSystem.turn(180 * color, 0);
+        drivingSystem.turn(160 * color, 0);
+        sleep(500);
         shootingSystem.shoot();
-        shootingSystem.off();
+        sleep(500);
         shootingSystem.load();
-        drivingSystem.driveForward(10, 0.5);
+        shootingSystem.off();
+        drivingSystem.driveForward(20, -0.5);
         opMode.requestOpModeStop();
     }
 
     public void rightB() {
         drivingSystem.driveForward(240, 0.5);
         drivingSystem.turn(90 * color, 0.5);
-        drivingSystem.driveForward(20, 0.5);
-        drivingSystem.driveForward(20, -0.5);
+        drivingSystem.driveForward(15,-0.5);
         drivingSystem.turn(90 * color, -0.5);
-        drivingSystem.driveForward(150,0.5);
+        drivingSystem.driveForward(180, 0.5);
         shootingSystem.on();
         shootingSystem.load();
-        drivingSystem.turn(15 * color, 0);
-//        drivingSystem.driveForward(1, 0.5);
+        drivingSystem.turn(2.5 * color, 0);
         sleep(500);
         shootingSystem.shoot();
         sleep(500);
-        drivingSystem.driveForward(50, -0.5);
+        drivingSystem.driveForward(21, -0.5);
         shootingSystem.load();
         shootingSystem.off();
         opMode.requestOpModeStop();
@@ -66,75 +70,101 @@ public class Routs {
     public void rightA() {
         drivingSystem.driveForward(160, 0.5);
         drivingSystem.turn(90 * color, 0.5);
-        drivingSystem.driveForward(110, 0.5);
-        drivingSystem.driveForward(45,-0.5);
+        sleep(1000);
+        drivingSystem.driveForward(100, 0.5);
+        drivingSystem.driveForward(60, -0.5);
         drivingSystem.turn(90 * color, 0);
-        shootingSystem.toggle();
+        shootingSystem.on();
         shootingSystem.load();
-        drivingSystem.driveForward(70, 0.5);
+        drivingSystem.driveForward(60, 0.5);
+        drivingSystem.turn(1.5*color,0);
+        sleep(500);
         shootingSystem.shoot();
         sleep(500);
-        shootingSystem.toggle();
+        shootingSystem.off();
         shootingSystem.load();
-        drivingSystem.driveForward(50, -0.5);
+        drivingSystem.driveForward(20, -0.5);
         opMode.requestOpModeStop();
     }
 
-    public void leftC(){
-        drivingSystem.turn(45 * color,0.7);
-        drivingSystem.turn(-45 * color,0.7);
-        drivingSystem.driveForward(300,0.5);
-        drivingSystem.driveForward(140,-0.5);
-        drivingSystem.turn(180 * color,0);
-        shootingSystem.on();
+    public void leftC() {
+        drivingSystem.turn(25 * color, 0.7);
+        drivingSystem.turn(-25 * color, 0.7);
+        drivingSystem.driveForward(270, 0.5);
+        drivingSystem.driveForward(160, -0.5);
         shootingSystem.load();
-        drivingSystem.turn(-30 * color,0);
+        shootingSystem.on();
+        drivingSystem.turn(170 * color, 0);
+        drivingSystem.getAnglePerfect(2000);
         shootingSystem.shoot();
         sleep(500);
-        drivingSystem.driveForward(55,-0.5);
+        drivingSystem.driveForward(10, -0.5);
         shootingSystem.off();
         shootingSystem.load();
         opMode.requestOpModeStop();
     }
 
-    public void leftB(){
-        drivingSystem.driveForward(240,0.5);
-        drivingSystem.turn(-90 * color,0.5);
-        drivingSystem.turn(90 * color,-0.5);
-        drivingSystem.driveForward(60,-0.5);
+    public void leftB() {
+        drivingSystem.driveForward(240, 0.5);
+        drivingSystem.turn(-90 * color, 0.5);
+        drivingSystem.driveForward(20, 0.5);
+        drivingSystem.driveForward(20, -0.5);
+        drivingSystem.turn(-90 * color, -0.25);
+        drivingSystem.driveForward(145, 0.5);
         shootingSystem.on();
         shootingSystem.load();
-        drivingSystem.turn(177*color,0);
+        drivingSystem.turn(-,0);
+        drivingSystem.getAnglePerfect(2000);
         shootingSystem.shoot();
         sleep(500);
-        drivingSystem.driveForward(30,-0.5);
+        drivingSystem.driveForward(20, -0.5);
         shootingSystem.load();
         opMode.requestOpModeStop();
     }
 
-    public void leftA(){
-        drivingSystem.turn(45 * color,0.7);
-        drivingSystem.turn(-45 * color,0.7);
-        drivingSystem.driveForward(170,0.5);
-        drivingSystem.turn(90,-0.5);
-        shootingSystem.on();
-        shootingSystem.load();
-        drivingSystem.turn(80,0);
-        drivingSystem.driveForward(80,0.5);
+    public void leftA() {
+        drivingSystem.turn(25 * color, 0.7);
+        drivingSystem.turn(-25 * color, 0.7);
+        drivingSystem.driveForward(130, 0.5);
+        drivingSystem.turn(90 * color, -0.5);
+        drivingSystem.turn(90 * color, 0);
+        drivingSystem.driveForward(38, 0.5);
+        drivingSystem.getAnglePerfect(2000);
+        resetForNewShot(false);
         shootingSystem.shoot();
         sleep(500);
-        drivingSystem.driveForward(25,-0.5);
+        resetForNewShot(true);
+        shootingSystem.shoot();
+        sleep(500);
+        drivingSystem.driveForward(15, -0.5);
         shootingSystem.off();
         shootingSystem.load();
         opMode.requestOpModeStop();
     }
 
+    void resetForNewShot(boolean withCollection){
+        shootingSystem.off();
+        shootingSystem.load();
+        if(withCollection)
+        collectionSystem.on();
+        sleep(3000);
+        collectionSystem.off();
+        shootingSystem.load();
+        sleep(500);
+        shootingSystem.shoot();
+        sleep(500);
+        shootingSystem.load();
+        sleep(500);
+        shootingSystem.shoot();
+        sleep(500);
+        shootingSystem.load();
+        shootingSystem.on();
+        sleep(1000);
+    }
 
-
-
-    void sleep(int time){
+    void sleep(int time) {
         timer.reset();
-        while(timer.milliseconds() < time){
+        while (timer.milliseconds() < time) {
             // ahhhhhhhhhhhhhhhhhhhh
         }
     }
